@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import de.jensd.fx.glyphs.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="702.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geneticCracker.controller.WelcomeController">
+   <children>
+      <FontAwesomeIconView glyphName="SIGN_IN" layoutX="401.0" layoutY="391.0" size="44.0" wrappingWidth="67.0" />
+      <ImageView fx:id="image" fitHeight="558.0" fitWidth="709.0" layoutX="-2.0" pickOnBounds="true" preserveRatio="true">
+
+      </ImageView>
+
+      <Button fx:id="enterButton" defaultButton="true" layoutX="205.0" layoutY="353.0" mnemonicParsing="false" onAction="#enterButtonAction" prefHeight="46.0" prefWidth="287.0" text="WEJDZ">
+         <font>
+            <Font name="Arial Bold" size="24.0" />
+         </font></Button>
+      <Label fx:id="label" layoutX="38.0" layoutY="56.0" text="Witaj," textFill="#c60101">
+         <font>
+            <Font name="System Bold" size="59.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>
