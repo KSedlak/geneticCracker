@@ -4,9 +4,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.springframework.stereotype.Service;
 
 
 
+@Service
 public class TranspositionKeyGenerator{
 
 	public  static Set<Integer> generateKey(int length) {

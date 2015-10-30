@@ -2,6 +2,10 @@ package geneticCracker.controller;
 
 
 
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import geneticCracker.logic.DNA.SubstitutionKey;
@@ -10,16 +14,25 @@ import geneticCracker.logic.Language.Language;
 import geneticCracker.logic.Language.LanguageBean;
 import geneticCracker.logic.cryptModules.substitution.crypter.SubstitiutionCrypter;
 import geneticCracker.logic.cryptModules.transpsitionCrypter.TranspositionCrypter;
+import geneticCracker.logic.languageAnalyzer.LanguageAnalyzer;
 import geneticCracker.logic.text.Text;
 import geneticCracker.logic.textReader.fileToString;
+import geneticCracker.logic.world.World;
+import geneticCracker.view.table.NgramsTableRow;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
 
 
 @Component
@@ -36,10 +49,27 @@ public class FirstPageController {
 		@Autowired TranspositionCrypter tCrypter;
 		@Autowired LanguageBean language;
 		@Autowired SubstitiutionCrypter sCrypter;
-		@FXML ListView commonWords;
-		@FXML ComboBox langCombo;
-		@FXML ComboBox ngramLengthCombo;
+		
 
+		@FXML ListView<String> commonWords;
+		@FXML ComboBox<String> languageChoosen;
+		@FXML ComboBox<Integer> ngramLength;
+		@FXML Button showButton;
+		@Autowired LanguageAnalyzer analyzer;
+
+		private ObservableList<NgramsTableRow> ngramsObservableList =FXCollections.observableArrayList();
+		@FXML TableView<NgramsTableRow> ngramsTable;
+		@FXML TableColumn<NgramsTableRow,Integer> ngramQtyColumn;
+		@FXML TableColumn<NgramsTableRow, String> ngramColumn;
+		
+		
+		@FXML TextArea decryptedTEXT;
+		@FXML TextArea textToDBreak;
+		@FXML Button Start;
+		@Autowired
+		World world;
+		@FXML TextField popSizeField;
+		
 		@FXML
 		private void initialize() {
 
@@ -51,6 +81,22 @@ public class FirstPageController {
 
 			keyLengthChooser.getItems().addAll(3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30);
 			initTextFromScratch();
+			
+			//tab2
+			
+			languageChoosen.getItems().add("Polski");
+			languageChoosen.getItems().add("Angielski");
+			
+			languageChoosen.getSelectionModel().select(1);
+			
+			ngramLength.getItems().addAll(2,3,4,5,6,7,8,9,10);
+			
+			ngramLength.getSelectionModel().select(1);
+			
+			ngramsTable.setItems(ngramsObservableList);
+		
+			ngramColumn.setCellValueFactory(cellData -> cellData.getValue().getValue());
+			ngramQtyColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
 		}
 
 		private void initTextFromScratch() {
@@ -83,6 +129,7 @@ public class FirstPageController {
 
 			}
 
+			textToDBreak.setText(cryptetTextArea.getText());
 		}
 
 		@FXML public void decrypt(ActionEvent event) {
@@ -112,7 +159,63 @@ public class FirstPageController {
 			}
 		}
 
+		@FXML public void analyzeLanguage(ActionEvent event) {
+			int amount=50;
+			int length=ngramLength.getSelectionModel().getSelectedItem();
+		
+			ngramsTable.getItems().clear();
+			
+			
+			String lang="";
+			
+			if(languageChoosen.getSelectionModel().getSelectedItem().equals("Polski")){
+				lang="pl";
+			}
+			
+			if(languageChoosen.getSelectionModel().getSelectedItem().equals("Angielski")){
+				lang="eng";
+			}
+			commonWords.getItems().clear();
+			try {
+				commonWords.getItems().addAll(analyzer.getMostFrequentWords(lang));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			lang="text/learn/"+lang+"/txt";//make dir
+			
+			LinkedHashMap<String, Integer> map=analyzer.getGlobalFrequencyMap(lang, length);
+			for(String s:map.keySet()){
+				ngramsObservableList.add(
+						new NgramsTableRow(
+								new SimpleStringProperty(s.replace(" ","_")),
+								new SimpleIntegerProperty(map.get(s))));
+			}
+			
+			
+			
+		
+			
+			
+			
+			
+			
+		}
 
+		@FXML public void startDecodingByGenetic(ActionEvent event) {
+			initWorld();
+			world.start(Integer.parseInt(popSizeField.getText()));
+			
+		}
+
+
+		
+	
+	private void initWorld(){
+		world.setTextToBreak(new Text(textToDBreak.getText()));
+	}
+		
 
 
 }

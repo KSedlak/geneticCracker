@@ -74,13 +74,13 @@
                            <children>
                               <ComboBox fx:id="languageChoosen" prefHeight="25.0" prefWidth="151.0" GridPane.rowIndex="1" />
                               <Label prefHeight="17.0" prefWidth="210.0" text="Najpopularniejsze ngramy dla " />
-                              <Button fx:id="showButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="142.0" text="Pokaz" GridPane.rowIndex="4" />
+                              <Button fx:id="showButton" mnemonicParsing="false" onAction="#analyzeLanguage" prefHeight="25.0" prefWidth="142.0" text="Pokaz" GridPane.rowIndex="4" />
                               <ComboBox fx:id="ngramLength" prefWidth="150.0" GridPane.rowIndex="3" />
                               <Label text="dlugosc ngramu" GridPane.rowIndex="2" />
                               <TableView fx:id="ngramsTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
                                 <columns>
-                                  <TableColumn fx:id="ngram" prefWidth="92.0" text="ngram" />
-                                  <TableColumn fx:id="ngramValue" prefWidth="107.0" text="liczba wystapien" />
+                                  <TableColumn fx:id="ngramColumn" prefWidth="92.0" text="ngram" />
+                                  <TableColumn fx:id="ngramQtyColumn" prefWidth="107.0" text="liczba wystapien" />
                                 </columns>
                               </TableView>
                            </children>
@@ -102,9 +102,17 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Untitled Tab">
+            <Tab text="Lamacz">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="popSizeField" layoutX="30.0" layoutY="31.0" text="500" />
+                        <Button fx:id="Start" layoutX="41.0" layoutY="419.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="211.0" text="Start" onAction="#startDecodingByGenetic" />
+                        <TextArea fx:id="decryptedTEXT"  wrapText="true" layoutX="705.0" layoutY="63.0" prefHeight="337.0" prefWidth="367.0" />
+                        <Label layoutX="818.0" layoutY="35.0" text="DECRYPTED" />
+                        <TextArea fx:id="textToDBreak"  wrapText="true"  layoutX="305.0" layoutY="63.0" prefHeight="337.0" prefWidth="331.0" />
+                        <Label layoutX="426.0" layoutY="35.0" text="TO DECODE" />
+                     </children></AnchorPane>
               </content>
             </Tab>
         </tabs>

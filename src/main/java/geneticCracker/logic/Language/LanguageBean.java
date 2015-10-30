@@ -64,9 +64,9 @@ public class LanguageBean {
 	List<Result> results = null;
 	try {
 		results = DetectLanguage.detect(s);
-	} catch (APIError e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	} catch (Exception e) {
+
+		return "en";
 	}
 
 	Result result = results.get(0);

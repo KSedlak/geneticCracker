@@ -1,6 +1,7 @@
 package geneticCracker.logic.languageAnalyzer;
 
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,7 +24,7 @@ public class LanguageAnalyzerTest {
 		LanguageAnalyzer analyzer=new LanguageAnalyzerImpl();
 		analyzer.setNgramer(new NgramerImpl());
 			//when
-	TreeMap<String, Integer> map=	analyzer.getGlobalFrequencyMap("text/learn/eng/txt", 3);
+		LinkedHashMap<String, Integer> map=	analyzer.getGlobalFrequencyMap("text/learn/eng/txt", 3);
 	List<String> mostCommonNgrams=map.entrySet().stream()
     .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
     .limit(50)

@@ -1,6 +1,8 @@
 package geneticCracker.logic.ngramer.Impl;
 
-import java.util.TreeMap;
+
+import java.util.LinkedHashMap;
+
 
 import org.springframework.stereotype.Component;
 
@@ -9,15 +11,17 @@ import geneticCracker.logic.ngramer.Ngramer;
 public class NgramerImpl  implements Ngramer{
 
 	@Override
-	public TreeMap<String, Integer> ngramText(String s, int length,TreeMap<String, Integer> map) {
-
+	public LinkedHashMap<String, Integer> ngramText(String s, int length,LinkedHashMap<String, Integer> map) {
+		String newline = System.getProperty("line.separator");
 		String ngramValue="";
 		for(int i=0;i<s.length();i++){
 			ngramValue=ngramValue+s.charAt(i);
 
+		
 
 			if(ngramValue.length()==length){
-				addToMap(ngramValue, map);
+				if(!ngramValue.contains(newline)){
+				addToMap(ngramValue, map);}
 				ngramValue="";
 			}
 
@@ -29,7 +33,7 @@ public class NgramerImpl  implements Ngramer{
 
 
 
-	public static String addToMap(String s, TreeMap<String, Integer> map){
+	public static String addToMap(String s,LinkedHashMap<String, Integer> map){
 
 		if(map.containsKey(s)){
 			int value=map.get(s);
@@ -40,10 +44,7 @@ public class NgramerImpl  implements Ngramer{
 
 		return s;
 	}
-
-
-
-
+	
 
 }
 

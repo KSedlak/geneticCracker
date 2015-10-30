@@ -19,10 +19,8 @@
          <font>
             <Font name="Arial Bold" size="24.0" />
          </font></Button>
-      <Label fx:id="label" layoutX="38.0" layoutY="56.0" text="Witaj," textFill="#c60101">
-         <font>
-            <Font name="System Bold" size="59.0" />
-         </font>
-      </Label>
+     
+     
+ 
    </children>
 </Pane>
