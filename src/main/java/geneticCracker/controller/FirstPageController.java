@@ -12,6 +12,8 @@ import geneticCracker.logic.DNA.SubstitutionKey;
 import geneticCracker.logic.DNA.TranspositionKey;
 import geneticCracker.logic.Language.Language;
 import geneticCracker.logic.Language.LanguageBean;
+import geneticCracker.logic.creature.Creature;
+import geneticCracker.logic.cryptModules.Crypter;
 import geneticCracker.logic.cryptModules.substitution.crypter.SubstitiutionCrypter;
 import geneticCracker.logic.cryptModules.transpsitionCrypter.TranspositionCrypter;
 import geneticCracker.logic.languageAnalyzer.LanguageAnalyzer;
@@ -49,7 +51,7 @@ public class FirstPageController {
 		@Autowired TranspositionCrypter tCrypter;
 		@Autowired LanguageBean language;
 		@Autowired SubstitiutionCrypter sCrypter;
-		
+
 
 		@FXML ListView<String> commonWords;
 		@FXML ComboBox<String> languageChoosen;
@@ -61,15 +63,15 @@ public class FirstPageController {
 		@FXML TableView<NgramsTableRow> ngramsTable;
 		@FXML TableColumn<NgramsTableRow,Integer> ngramQtyColumn;
 		@FXML TableColumn<NgramsTableRow, String> ngramColumn;
-		
-		
+
+
 		@FXML TextArea decryptedTEXT;
 		@FXML TextArea textToDBreak;
 		@FXML Button Start;
 		@Autowired
 		World world;
 		@FXML TextField popSizeField;
-		
+
 		@FXML
 		private void initialize() {
 
@@ -81,20 +83,20 @@ public class FirstPageController {
 
 			keyLengthChooser.getItems().addAll(3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30);
 			initTextFromScratch();
-			
+
 			//tab2
-			
+
 			languageChoosen.getItems().add("Polski");
 			languageChoosen.getItems().add("Angielski");
-			
+
 			languageChoosen.getSelectionModel().select(1);
-			
+
 			ngramLength.getItems().addAll(2,3,4,5,6,7,8,9,10);
-			
+
 			ngramLength.getSelectionModel().select(1);
-			
+
 			ngramsTable.setItems(ngramsObservableList);
-		
+
 			ngramColumn.setCellValueFactory(cellData -> cellData.getValue().getValue());
 			ngramQtyColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
 		}
@@ -162,16 +164,16 @@ public class FirstPageController {
 		@FXML public void analyzeLanguage(ActionEvent event) {
 			int amount=50;
 			int length=ngramLength.getSelectionModel().getSelectedItem();
-		
+
 			ngramsTable.getItems().clear();
-			
-			
+
+
 			String lang="";
-			
+
 			if(languageChoosen.getSelectionModel().getSelectedItem().equals("Polski")){
 				lang="pl";
 			}
-			
+
 			if(languageChoosen.getSelectionModel().getSelectedItem().equals("Angielski")){
 				lang="eng";
 			}
@@ -182,9 +184,9 @@ public class FirstPageController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			lang="text/learn/"+lang+"/txt";//make dir
-			
+
 			LinkedHashMap<String, Integer> map=analyzer.getGlobalFrequencyMap(lang, length);
 			for(String s:map.keySet()){
 				ngramsObservableList.add(
@@ -192,30 +194,45 @@ public class FirstPageController {
 								new SimpleStringProperty(s.replace(" ","_")),
 								new SimpleIntegerProperty(map.get(s))));
 			}
-			
-			
-			
-		
-			
-			
-			
-			
-			
+
+
+
+
+
+
+
+
+
 		}
 
 		@FXML public void startDecodingByGenetic(ActionEvent event) {
 			initWorld();
 			world.start(Integer.parseInt(popSizeField.getText()));
-			
+
+
+			Creature best=world.getBestCreatureOnWholeWorld();
+			Text decoded=crypterBasedDna(best).decrypt(best.getText(), best.getDna());
+			decryptedTEXT.setText(decoded.getContentOfText());
+
+
 		}
 
 
-		
-	
+
+		private Crypter crypterBasedDna(Creature c){
+			if(c.getDna() instanceof SubstitutionKey){
+				return sCrypter;
+			}
+			if(c.getDna() instanceof TranspositionKey){
+				return tCrypter;
+			}
+			return sCrypter;
+		}
+
 	private void initWorld(){
 		world.setTextToBreak(new Text(textToDBreak.getText()));
 	}
-		
+
 
 
 }

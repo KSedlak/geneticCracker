@@ -30,6 +30,12 @@ public void setCreatures(List<Creature> creatures) {
 
 
 
+public Creature getBestCreatureFromPopulation(){
+
+	return creatures.stream().max((c1, c2) -> Double.compare(c1.getMark(),c2.getMark())).get();
+
+}
+
 
 
 }

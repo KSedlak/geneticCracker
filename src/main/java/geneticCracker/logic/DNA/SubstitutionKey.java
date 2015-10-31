@@ -21,6 +21,11 @@ public class SubstitutionKey implements Key{
 		this.language=l;
 		generateRandom();
 	}
+	public SubstitutionKey(String[] key,Language l) {
+		super();
+		this.language=l;
+		this.key = key;
+	}
 
 	public String getKeyString() {
 		String buff="";
@@ -63,6 +68,9 @@ public class SubstitutionKey implements Key{
 		this.key = key;
 	}
 
+	public void setKey(Object[] key) {
+		this.key = (String[]) key;
+	}
 	public String[] getRandomVariation(String [] alphabet){
 		String[] mixed = new String[alphabet.length];
 		Set<Integer> result = new LinkedHashSet<Integer>();
@@ -78,6 +86,10 @@ public class SubstitutionKey implements Key{
 		}
 		return mixed;
 
+	}
+	@Override
+	public Key getCopy() {
+		return new SubstitutionKey(this.getKey(), this.getLanguage());
 	}
 
 }

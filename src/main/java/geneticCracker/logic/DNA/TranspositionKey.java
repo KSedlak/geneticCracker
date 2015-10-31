@@ -21,6 +21,13 @@ public class TranspositionKey implements Key {
 
 
 	}
+	public TranspositionKey(Integer[] s) {
+		super();
+this.key=s;
+		}
+
+
+
 
 	public Integer[] getKey() {
 		return key;
@@ -56,5 +63,16 @@ public class TranspositionKey implements Key {
 		super();
 		key=new	Integer[length];
 		generateRandom();
+	}
+
+	public void setKey(Object[] key) {
+		this.key = (Integer[]) key;
+
+	}
+
+	@Override
+	public Key getCopy() {
+
+		return new TranspositionKey(this.key);
 	}
 }
