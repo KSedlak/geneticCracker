@@ -42,7 +42,7 @@ public class SimpleGenerationPasser implements generationPasser{
 					return Double.compare(o1.getMark(), o2.getMark());
 				}
 			});
-
+			
 
 
 			return old.stream().limit(size).collect(Collectors.toList());

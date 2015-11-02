@@ -26,7 +26,7 @@ public class SubstitutionKey implements Key{
 		this.language=l;
 		this.key = key;
 	}
-
+	@Override
 	public String getKeyString() {
 		String buff="";
 		for(String i:key){

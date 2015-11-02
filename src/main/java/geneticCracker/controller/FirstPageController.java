@@ -31,10 +31,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 
 
 @Component
@@ -68,9 +71,18 @@ public class FirstPageController {
 		@FXML TextArea decryptedTEXT;
 		@FXML TextArea textToDBreak;
 		@FXML Button Start;
+		@FXML TextField popSizeField;
+		@FXML TextField decodedKeyField;
+		@FXML Label bestFitMark;
+		@FXML Button nextGenearationNumber;
+		@FXML Label generationNumber;
+		@FXML TextField geneartionsNumberInput;
+		Task task;
+	  	Creature best;
 		@Autowired
 		World world;
-		@FXML TextField popSizeField;
+		@FXML ProgressBar progressBar;
+		protected Text decoded;
 
 		@FXML
 		private void initialize() {
@@ -80,8 +92,12 @@ public class FirstPageController {
 
 			cipherChooser.getItems().add("Podstawieniowy");
 			cipherChooser.getItems().add("Transpozycyjny");
+			
+			cipherChooser.getSelectionModel().select(0);
 
 			keyLengthChooser.getItems().addAll(3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30);
+			keyLengthChooser.getSelectionModel().select(3);
+
 			initTextFromScratch();
 
 			//tab2
@@ -99,6 +115,8 @@ public class FirstPageController {
 
 			ngramColumn.setCellValueFactory(cellData -> cellData.getValue().getValue());
 			ngramQtyColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
+			
+		
 		}
 
 		private void initTextFromScratch() {
@@ -197,8 +215,7 @@ public class FirstPageController {
 
 
 
-
-
+		
 
 
 
@@ -207,15 +224,48 @@ public class FirstPageController {
 
 		@FXML public void startDecodingByGenetic(ActionEvent event) {
 			initWorld();
-			world.start(Integer.parseInt(popSizeField.getText()));
 
 
-			Creature best=world.getBestCreatureOnWholeWorld();
-			Text decoded=crypterBasedDna(best).decrypt(best.getText(), best.getDna());
-			decryptedTEXT.setText(decoded.getContentOfText());
+			world.start(
+					Integer.parseInt(popSizeField.getText()));
 
+			task = new Task<Void>() {
+			    @Override public Void call() {
+			        final int max =	Integer.parseInt(geneartionsNumberInput.getText());
+			        for (int i = 1; i <= max; i++) {
+			        	world.generate();
+			            updateProgress(i, max);
+			            best=world.getBestCreatureOnWholeWorld();
+						decoded=crypterBasedDna(best).decrypt(best.getText(), best.getDna());
+						decryptedTEXT.setText(decoded.getContentOfText());
+						bestFitMark.setText(best.getMark()+"");
+						decodedKeyField.setText(best.getDna().getKeyString());
+						generationNumber.setText(i+"");
+			            
+			        }
+			        return null;
+			    }
+	
+			    @Override
+			    protected void succeeded() {
+			  
+			    	super.succeeded();
+			    	
+			    	
+			    }
+			};
+			progressBar.progressProperty().bind(task.progressProperty());	
+		
+			new Thread(task).start();
+
+
+		
+			
 
 		}
+
+
+
 
 
 
