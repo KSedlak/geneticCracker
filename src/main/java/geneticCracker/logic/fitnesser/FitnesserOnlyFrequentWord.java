@@ -44,7 +44,7 @@ public class FitnesserOnlyFrequentWord implements FitnessMaker {
 	@PostConstruct
 	public void loadData(){
 		try {
-			freqEng=languageSpec.getMostFrequentWords("eng");
+			freqEng=languageSpec.getMostFrequentWords("eng",100);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

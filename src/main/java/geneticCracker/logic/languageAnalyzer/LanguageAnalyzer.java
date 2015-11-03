@@ -20,7 +20,7 @@ void setNgramer(Ngramer ngramerImpl);
 List<String> getNmostFrequentNgrams(String path, int lengthNgram, int amount);
 
 
-List<String> getMostFrequentWords(String lang) throws IOException;
+List<String> getMostFrequentWords(String lang,int limit) throws IOException;
 
 
 }

@@ -139,7 +139,7 @@ ngramer=ngramerImpl;
 	}
 
 	@Override
-	public List<String> getMostFrequentWords(String lang) throws IOException{
+	public List<String> getMostFrequentWords(String lang, int limit) throws IOException{
 	String change=	"text/learn/"+lang+"/frequentWords";
 
 	Path dir = null;
@@ -154,7 +154,7 @@ ngramer=ngramerImpl;
 
 	
 	  
-	List<String> list = Files.lines(pa).map(s -> s.trim()).collect(Collectors.toList());
+	List<String> list = Files.lines(pa).map(s -> s.trim()).limit(limit).collect(Collectors.toList());
 
 
 	

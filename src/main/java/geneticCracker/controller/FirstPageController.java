@@ -225,7 +225,7 @@ public class FirstPageController {
 			}
 			commonWords.getItems().clear();
 			try {
-				commonWords.getItems().addAll(analyzer.getMostFrequentWords(lang));
+				commonWords.getItems().addAll(analyzer.getMostFrequentWords(lang, 50));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -265,6 +265,7 @@ public class FirstPageController {
 			        int i;
 			        for (i = 1; i <= max; i++) {
 			        	world.generate();
+			        	System.out.println(world.getBestCreatureOnWholeWorld().getDna().getKeyString()+" "+world.getBestCreatureOnWholeWorld().getMark());
 			            updateProgress(i, max);
 			   
 			    

@@ -39,12 +39,11 @@ public class World {
 	@Autowired
 	FirstPageController controller;
 
-
-	
-
 	private FitnessMaker fitnesMaker;
-	
+
 	private int worldGeneration;
+
+	private Population populationTranspositionEnglish;
 
 	public World() {
 		populations = new ArrayList<Population>();
@@ -60,36 +59,42 @@ public class World {
 
 	public void start(int size, FitnessMaker maker) {
 		worldGeneration = 0;
-		fitnesMaker=maker;
+		fitnesMaker = maker;
 		populationSubstitionEnglish = new Population();
 		textToBreak.setLanguage(langs.getEnglish());
 		populationSubstitionEnglish.setCreatures(creatureGenerator.generateCreaturesSubstititution(size, textToBreak));
 		populations.add(populationSubstitionEnglish);
+
+		populationTranspositionEnglish = new Population();
+		textToBreak.setLanguage(langs.getEnglish());
+		populationTranspositionEnglish
+				.setCreatures(creatureGenerator.generateCreaturesTransposition(size, textToBreak,5,6));
+		populations.add(populationTranspositionEnglish);
 		markFirstPopulation();
-	
-	
 
 	}
 
-	private void markFirstPopulation(){
+	private void markFirstPopulation() {
 		Creature c;
-		for(int i=0;i<populationSubstitionEnglish.getCreatures().size();i++){
-			c=populationSubstitionEnglish.getCreatures().get(i);
-		fitnesMaker.testCreatureInLife(c);
-		}
-		Collections.sort(populationSubstitionEnglish.getCreatures());
-		Collections.reverse(populationSubstitionEnglish.getCreatures());
-	}
-	
-	public void generate() {
 
-			populationSubstitionEnglish
-					.setCreatures(generationManager.makeNewGeneration(populationSubstitionEnglish.getCreatures(),fitnesMaker));
-		worldGeneration=worldGeneration+1;
-		
+		for (Population p : populations) {
+			for (int i = 0; i < p.getCreatures().size(); i++) {
+				c = p.getCreatures().get(i);
+				fitnesMaker.testCreatureInLife(c);
+			}
+			Collections.sort(p.getCreatures());
+			Collections.reverse(p.getCreatures());
+		}
 	}
-	
-	
+
+	public void generate() {
+		for (Population p : populations) {
+		p.setCreatures(
+				generationManager.makeNewGeneration(p.getCreatures(), fitnesMaker));
+		}
+		worldGeneration = worldGeneration + 1;
+
+	}
 
 	public int getWorldGeneration() {
 		return worldGeneration;
