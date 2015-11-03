@@ -38,6 +38,7 @@ public class SusbstitutionCrypterImpl implements SubstitiutionCrypter {
 		}
 
 		t.setContentOfText(cryptedContent);
+		mapper.clear();
 		return t;
 	}
 
@@ -55,6 +56,7 @@ public class SusbstitutionCrypterImpl implements SubstitiutionCrypter {
 
 	@Override
 	public Text decrypt(Text t, Key k) {
+
 		generateKeyAndInitMapper(t.getLanguage(),k);
 		BiMap<String, String> reversed = mapper.inverse();
 		String decryptedContent = "";
@@ -69,8 +71,9 @@ public class SusbstitutionCrypterImpl implements SubstitiutionCrypter {
 			decryptedContent = decryptedContent +added;
 		}
 
-		t.setContentOfText(decryptedContent);
-		return t;
+	
+	
+		return new Text(decryptedContent, t.getLanguage());
 
 	}
 

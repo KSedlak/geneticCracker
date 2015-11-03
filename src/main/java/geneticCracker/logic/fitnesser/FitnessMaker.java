@@ -1,9 +1,13 @@
 package geneticCracker.logic.fitnesser;
 
+import java.util.TreeMap;
+
 import geneticCracker.logic.creature.Creature;
 
 public interface FitnessMaker {
 
-public Creature testCreatureInLife(Creature c);
+public void testCreatureInLife(Creature c);
+
+
 
 }

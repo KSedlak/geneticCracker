@@ -1,19 +1,19 @@
 package geneticCracker.logic.world;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import geneticCracker.controller.FirstPageController;
-import geneticCracker.logic.DNA.SubstitutionKey;
 import geneticCracker.logic.Language.LanguageBean;
 import geneticCracker.logic.creature.Creature;
 import geneticCracker.logic.creatureMaker.CreatureMaker;
-import geneticCracker.logic.creatureMaker.Impl.CreatureMakerImpl;
 import geneticCracker.logic.fitnesser.FitnessMaker;
 import geneticCracker.logic.fitnesser.FitnesserOnlyFrequentWord;
+import geneticCracker.logic.fitnesser.FitnesserOnlyNgrams;
 import geneticCracker.logic.generationMaker.SimpleGenerationPasser;
 import geneticCracker.logic.population.Population;
 import geneticCracker.logic.text.Text;
@@ -39,9 +39,11 @@ public class World {
 	@Autowired
 	FirstPageController controller;
 
-	@Autowired
-	FitnesserOnlyFrequentWord fitnesser;
 
+	
+
+	private FitnessMaker fitnesMaker;
+	
 	private int worldGeneration;
 
 	public World() {
@@ -56,30 +58,33 @@ public class World {
 		this.textToBreak = textToBreak;
 	}
 
-	public void start(int size) {
+	public void start(int size, FitnessMaker maker) {
 		worldGeneration = 0;
+		fitnesMaker=maker;
 		populationSubstitionEnglish = new Population();
 		textToBreak.setLanguage(langs.getEnglish());
 		populationSubstitionEnglish.setCreatures(creatureGenerator.generateCreaturesSubstititution(size, textToBreak));
 		populations.add(populationSubstitionEnglish);
 		markFirstPopulation();
-		for(Creature c:populationSubstitionEnglish.getCreatures()){
-			System.out.println(c.getMark());
-		}
+	
+	
 
 	}
 
 	private void markFirstPopulation(){
-		for(Creature c:populationSubstitionEnglish.getCreatures()){
-			fitnesser.testCreatureInLife(c);
+		Creature c;
+		for(int i=0;i<populationSubstitionEnglish.getCreatures().size();i++){
+			c=populationSubstitionEnglish.getCreatures().get(i);
+		fitnesMaker.testCreatureInLife(c);
 		}
+		Collections.sort(populationSubstitionEnglish.getCreatures());
+		Collections.reverse(populationSubstitionEnglish.getCreatures());
 	}
 	
 	public void generate() {
 
 			populationSubstitionEnglish
-					.setCreatures(generationManager.makeNewGeneration(populationSubstitionEnglish.getCreatures()));
-			System.out.println(worldGeneration);
+					.setCreatures(generationManager.makeNewGeneration(populationSubstitionEnglish.getCreatures(),fitnesMaker));
 		worldGeneration=worldGeneration+1;
 		
 	}

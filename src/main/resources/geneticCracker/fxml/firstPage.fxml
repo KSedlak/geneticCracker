@@ -5,9 +5,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="1094.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geneticCracker.controller.FirstPageController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="1337.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geneticCracker.controller.FirstPageController">
    <children>
-      <TabPane prefHeight="600.0" prefWidth="1094.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="600.0" prefWidth="1336.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="crypterTab" text="Szyfrator">
             <content>
@@ -105,7 +105,7 @@
             </Tab>
             <Tab text="Lamacz">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="1252.0">
                      <children>
                         <Button fx:id="Start" layoutX="41.0" layoutY="419.0" mnemonicParsing="false" onAction="#startDecodingByGenetic" prefHeight="50.0" prefWidth="211.0" text="Start" />
                         <TextArea fx:id="decryptedTEXT" layoutX="705.0" layoutY="63.0" prefHeight="337.0" prefWidth="367.0" wrapText="true" />
@@ -147,6 +147,8 @@
                               <Label text="population size" />
                               <Label text="geneartions" GridPane.rowIndex="1" />
                               <TextField fx:id="geneartionsNumberInput" text="500" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="Fitness" GridPane.rowIndex="2" />
+                              <ComboBox fx:id="fitnessByCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                         <Label layoutX="67.0" layoutY="33.0" text="Parametry">
@@ -154,7 +156,9 @@
                               <Font size="28.0" />
                            </font>
                         </Label>
-                        <ProgressBar fx:id="progressBar" layoutX="871.0" layoutY="14.0" prefHeight="18.0" prefWidth="209.0" progress="0.0" />
+                        <ProgressBar fx:id="progressBar" layoutX="857.0" layoutY="14.0" prefHeight="18.0" prefWidth="209.0" progress="0.0" />
+                        <ListView fx:id="pointsFor" layoutX="1136.0" layoutY="63.0" prefHeight="341.0" prefWidth="200.0" />
+                        <Label layoutX="1208.0" layoutY="45.0" text="PUNKTY ZA:" />
                      </children></AnchorPane>
               </content>
             </Tab>

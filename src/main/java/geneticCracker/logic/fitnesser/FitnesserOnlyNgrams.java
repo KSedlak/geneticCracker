@@ -1,6 +1,5 @@
 package geneticCracker.logic.fitnesser;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -18,7 +17,7 @@ import geneticCracker.logic.languageAnalyzer.LanguageAnalyzer;
 import geneticCracker.logic.text.Text;
 
 @Component
-public class FitnesserOnlyFrequentWord implements FitnessMaker {
+public class FitnesserOnlyNgrams implements FitnessMaker {
 
 	@Autowired
 	SubstitiutionCrypter sCrypter;
@@ -29,26 +28,20 @@ public class FitnesserOnlyFrequentWord implements FitnessMaker {
 	@Autowired
 	LanguageAnalyzer languageSpec;
 	
-	private List<String> freqEng;
-
-	private Key k;
-
+	private List<String> map;
+	
 	private Crypter crypter;
 	
-
+	private Key k;
 	
-	private FitnesserOnlyFrequentWord() {
-
+	private FitnesserOnlyNgrams() {
+	
 	}
 	
 	@PostConstruct
 	public void loadData(){
-		try {
-			freqEng=languageSpec.getMostFrequentWords("eng");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		map=languageSpec.getNmostFrequentNgrams("text/learn/eng/txt", 3,200);
+
 	}
 	
 	@Override
@@ -72,36 +65,32 @@ public class FitnesserOnlyFrequentWord implements FitnessMaker {
 	private double markText(Creature c, Crypter crypt){
 		
 Text dec=crypt.decrypt(c.getText(), c.getDna());
-		String mapped;
+
 		String check="";
 		double res=0;
-	for(String x:freqEng){
-	if(dec.getContentOfText().contains(x.toUpperCase())){
+	for(String x:map){
+		check=x.toUpperCase();
+	if(dec.getContentOfText().contains(check)){
 		res=res+5;
-	mapped=(x.replaceAll(" ", "_").toUpperCase());
-
+		String mapped = (x.replaceAll(" ", "_").toUpperCase());
+		
 		addToMap(mapped,c.getPoints());
+	
 	}
 		
 	}
 		return res;
 	}
-
-	
-
-
 	private void addToMap(String s, TreeMap<String, Integer> points){
 		int val=0;
+	
 		if(points.containsKey(s)){
 			val=points.get(s);
 		}
 		points.put(s, val+1);
 		
 	}
-	
-	
-	
-	
-	
+
+
 	
 }

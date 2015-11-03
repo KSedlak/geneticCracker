@@ -1,5 +1,6 @@
 package geneticCracker.logic.generationMaker;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import geneticCracker.logic.creature.Creature;
 import geneticCracker.logic.crosser.Impl.SimpleRandomCross;
+import geneticCracker.logic.fitnesser.FitnessMaker;
 import geneticCracker.logic.fitnesser.FitnesserOnlyFrequentWord;
 
 @Service
@@ -21,7 +23,7 @@ public class SimpleGenerationPasser implements generationPasser{
 
 	double percentElite=40;
 	@Override
-	public List<Creature> makeNewGeneration(List<Creature> old) {
+	public List<Creature> makeNewGeneration(List<Creature> old,  FitnessMaker fit) {
 
 
 			int size=old.size();
@@ -32,7 +34,7 @@ public class SimpleGenerationPasser implements generationPasser{
 			Creature good=old.get(ThreadLocalRandom.current().nextInt(0,eliteNumberIndexes+1));
 			Creature second=old.get(ThreadLocalRandom.current().nextInt(0,old.size()));
 
-			old.addAll(crosser.makeChild(good, second));
+			old.addAll(crosser.makeChild(good, second,fit));
 
 			}while(old.size()<(2*size));
 
@@ -42,6 +44,7 @@ public class SimpleGenerationPasser implements generationPasser{
 					return Double.compare(o1.getMark(), o2.getMark());
 				}
 			});
+			Collections.reverse(old);
 			
 
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import geneticCracker.logic.DNA.Key;
 import geneticCracker.logic.creature.Creature;
 import geneticCracker.logic.crosser.Crosser;
+import geneticCracker.logic.fitnesser.FitnessMaker;
 import geneticCracker.logic.fitnesser.FitnesserOnlyFrequentWord;
 import geneticCracker.logic.mutator.Mutator;
 import geneticCracker.logic.utils.RadnomIndexesGenerator;
@@ -21,14 +22,12 @@ public class SimpleRandomCross implements Crosser {
 
 	double crossPoints=40;
 
-	@Autowired
-	FitnesserOnlyFrequentWord fitnesser;
 
 	@Autowired
 	Mutator mutator;
 
 	@Override
-	public List<Creature> makeChild(Creature a, Creature b){
+	public List<Creature> makeChild(Creature a, Creature b, FitnessMaker fit){
 		List<Creature> childs=new ArrayList<Creature>();
 		int dnaLength=b.getDna().getKey().length;
 		int cr=(int) (crossPoints*dnaLength/100);
@@ -62,7 +61,7 @@ public class SimpleRandomCross implements Crosser {
 
 		for(Creature c:childs){
 			mutator.mutate(c);
-			fitnesser.testCreatureInLife(c);
+			fit.testCreatureInLife(c);
 		}
 
 

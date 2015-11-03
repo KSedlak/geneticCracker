@@ -3,7 +3,9 @@ package geneticCracker.controller;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ import geneticCracker.logic.creature.Creature;
 import geneticCracker.logic.cryptModules.Crypter;
 import geneticCracker.logic.cryptModules.substitution.crypter.SubstitiutionCrypter;
 import geneticCracker.logic.cryptModules.transpsitionCrypter.TranspositionCrypter;
+import geneticCracker.logic.fitnesser.FitnessMaker;
+import geneticCracker.logic.fitnesser.FitnesserOnlyFrequentWord;
+import geneticCracker.logic.fitnesser.FitnesserOnlyNgrams;
 import geneticCracker.logic.languageAnalyzer.LanguageAnalyzer;
 import geneticCracker.logic.text.Text;
 import geneticCracker.logic.textReader.fileToString;
@@ -27,6 +32,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -84,12 +90,23 @@ public class FirstPageController {
 		@FXML ProgressBar progressBar;
 		protected Text decoded;
 
+		
+		@Autowired
+		FitnesserOnlyFrequentWord fitnesserOnlyFrequentWord;
+		
+		@Autowired
+		FitnesserOnlyNgrams fitnesserOnlyNgrams;
+		@FXML ComboBox fitnessByCombo;
+		List<FitnessMaker> fitnessFunctions;
+		@FXML ListView pointsFor;
+		private ObservableList<String> pointsForList;
+		
 		@FXML
 		private void initialize() {
 
 			plainTextArea.setWrapText(true);
 			cryptetTextArea.setWrapText(true);
-
+			
 			cipherChooser.getItems().add("Podstawieniowy");
 			cipherChooser.getItems().add("Transpozycyjny");
 			
@@ -116,6 +133,17 @@ public class FirstPageController {
 			ngramColumn.setCellValueFactory(cellData -> cellData.getValue().getValue());
 			ngramQtyColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
 			
+			//tab3
+			
+			fitnessByCombo.getItems().add("By Word Freq");
+			fitnessByCombo.getItems().add("By Ngram Freq");
+			
+			fitnessByCombo.getSelectionModel().select(1);
+			
+			fitnessFunctions=new ArrayList<FitnessMaker>();
+			pointsForList=FXCollections.observableArrayList();
+			
+		
 		
 		}
 
@@ -173,14 +201,14 @@ public class FirstPageController {
 
 				Text t=new Text(cryptetTextArea.getText(),lang);
 
-				sCrypter.decrypt(t, key);
-				plainTextArea.setText(t.getContentOfText());
+				Text dec=sCrypter.decrypt(t, key);
+				plainTextArea.setText(dec.getContentOfText());
 				cipherChooser.getSelectionModel().select(0);
 			}
 		}
 
 		@FXML public void analyzeLanguage(ActionEvent event) {
-			int amount=50;
+
 			int length=ngramLength.getSelectionModel().getSelectedItem();
 
 			ngramsTable.getItems().clear();
@@ -224,23 +252,22 @@ public class FirstPageController {
 
 		@FXML public void startDecodingByGenetic(ActionEvent event) {
 			initWorld();
-
+			initializeFitnessFunctions();
 
 			world.start(
-					Integer.parseInt(popSizeField.getText()));
+					Integer.parseInt(popSizeField.getText()),
+					fitnessFunctions.get(fitnessByCombo.getSelectionModel().getSelectedIndex())
+					);
 
 			task = new Task<Void>() {
 			    @Override public Void call() {
 			        final int max =	Integer.parseInt(geneartionsNumberInput.getText());
-			        for (int i = 1; i <= max; i++) {
+			        int i;
+			        for (i = 1; i <= max; i++) {
 			        	world.generate();
 			            updateProgress(i, max);
-			            best=world.getBestCreatureOnWholeWorld();
-						decoded=crypterBasedDna(best).decrypt(best.getText(), best.getDna());
-						decryptedTEXT.setText(decoded.getContentOfText());
-						bestFitMark.setText(best.getMark()+"");
-						decodedKeyField.setText(best.getDna().getKeyString());
-						generationNumber.setText(i+"");
+			   
+			    
 			            
 			        }
 			        return null;
@@ -248,7 +275,18 @@ public class FirstPageController {
 	
 			    @Override
 			    protected void succeeded() {
-			  
+			     	Platform.runLater(new Runnable() {
+		    		   @Override
+	        		   public void run() {
+	        		         best=world.getBestCreatureOnWholeWorld();
+	 						decoded=crypterBasedDna(best).decrypt(new Text(textToDBreak.getText(),best.getText().getLanguage()), best.getDna());
+	 						decryptedTEXT.setText(decoded.getContentOfText());
+	 						bestFitMark.setText(best.getMark()+"");
+	 						decodedKeyField.setText(best.getDna().getKeyString());
+	 						generationNumber.setText(world.getWorldGeneration()+"");
+	 						updatePointsFor(best);
+	        		   }                                     
+	        		});  
 			    	super.succeeded();
 			    	
 			    	
@@ -263,6 +301,16 @@ public class FirstPageController {
 			
 
 		}
+		
+	private void updatePointsFor(Creature c){
+		pointsFor.getItems().clear();
+		pointsFor.getItems().addAll(c.getPoints().keySet());
+	}
+
+		private void initializeFitnessFunctions() {
+			fitnessFunctions.add(fitnesserOnlyFrequentWord);
+			fitnessFunctions.add(fitnesserOnlyNgrams);
+		}
 
 
 
@@ -272,6 +320,7 @@ public class FirstPageController {
 		private Crypter crypterBasedDna(Creature c){
 			if(c.getDna() instanceof SubstitutionKey){
 				return sCrypter;
+		
 			}
 			if(c.getDna() instanceof TranspositionKey){
 				return tCrypter;

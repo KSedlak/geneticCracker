@@ -60,7 +60,7 @@ public class CreatureMakerImpl implements CreatureMaker {
 			Creature c=new Creature(t, key);
 			result.add(c);
 		}
-		
+	
 		
 		return result;
 	}
