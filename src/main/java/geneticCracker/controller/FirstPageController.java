@@ -10,6 +10,8 @@ import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import geneticCracker.logic.DNA.Key;
 import geneticCracker.logic.DNA.SubstitutionKey;
 import geneticCracker.logic.DNA.TranspositionKey;
 import geneticCracker.logic.Language.Language;
@@ -57,6 +59,11 @@ public class FirstPageController {
 		@FXML Button cryptButton;
 		@FXML TextArea cryptetTextArea;
 		@FXML TextField keyField;
+		@FXML TextArea decryptedAreaFirstTab;
+		@FXML Label markLabel;
+		@FXML ComboBox markFunctions;
+		@FXML Button markDecryptedText;
+
 		@Autowired TranspositionCrypter tCrypter;
 		@Autowired LanguageBean language;
 		@Autowired SubstitiutionCrypter sCrypter;
@@ -66,14 +73,14 @@ public class FirstPageController {
 		@FXML ComboBox<String> languageChoosen;
 		@FXML ComboBox<Integer> ngramLength;
 		@FXML Button showButton;
+
 		@Autowired LanguageAnalyzer analyzer;
 
 		private ObservableList<NgramsTableRow> ngramsObservableList =FXCollections.observableArrayList();
+
 		@FXML TableView<NgramsTableRow> ngramsTable;
 		@FXML TableColumn<NgramsTableRow,Integer> ngramQtyColumn;
 		@FXML TableColumn<NgramsTableRow, String> ngramColumn;
-
-
 		@FXML TextArea decryptedTEXT;
 		@FXML TextArea textToDBreak;
 		@FXML Button Start;
@@ -83,38 +90,47 @@ public class FirstPageController {
 		@FXML Button nextGenearationNumber;
 		@FXML Label generationNumber;
 		@FXML TextField geneartionsNumberInput;
-		Task task;
-	  	Creature best;
+
+		private Task task;
+	  	private Creature best;
+
+		@FXML ProgressBar progressBar;
 		@Autowired
 		World world;
-		@FXML ProgressBar progressBar;
+
 		protected Text decoded;
 
-		
-		@Autowired
-		FitnesserOnlyFrequentWord fitnesserOnlyFrequentWord;
-		
-		@Autowired
-		FitnesserOnlyNgrams fitnesserOnlyNgrams;
 		@FXML ComboBox fitnessByCombo;
 		List<FitnessMaker> fitnessFunctions;
 		@FXML ListView pointsFor;
+		@Autowired
+		FitnesserOnlyFrequentWord fitnesserOnlyFrequentWord;
+		@Autowired
+		FitnesserOnlyNgrams fitnesserOnlyNgrams;
+
+		private FitnessMaker fitnesser;
+
 		private ObservableList<String> pointsForList;
-		
+
+
 		@FXML
 		private void initialize() {
 
 			plainTextArea.setWrapText(true);
 			cryptetTextArea.setWrapText(true);
-			
+
 			cipherChooser.getItems().add("Podstawieniowy");
 			cipherChooser.getItems().add("Transpozycyjny");
-			
+
 			cipherChooser.getSelectionModel().select(0);
 
 			keyLengthChooser.getItems().addAll(3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30);
 			keyLengthChooser.getSelectionModel().select(3);
 
+
+			markFunctions.getItems().add("By Word Freq");
+			markFunctions.getItems().add("By Ngram Freq");
+			markFunctions.getSelectionModel().select(0);
 			initTextFromScratch();
 
 			//tab2
@@ -132,19 +148,22 @@ public class FirstPageController {
 
 			ngramColumn.setCellValueFactory(cellData -> cellData.getValue().getValue());
 			ngramQtyColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
-			
+
 			//tab3
-			
-			fitnessByCombo.getItems().add("By Word Freq");
-			fitnessByCombo.getItems().add("By Ngram Freq");
-			
+
+			fitnessByCombo.getItems().addAll(markFunctions.getItems());
+
+
 			fitnessByCombo.getSelectionModel().select(1);
-			
+
 			fitnessFunctions=new ArrayList<FitnessMaker>();
 			pointsForList=FXCollections.observableArrayList();
-			
-		
-		
+
+
+
+
+
+
 		}
 
 		private void initTextFromScratch() {
@@ -187,7 +206,7 @@ public class FirstPageController {
 				Text t=new Text(cryptetTextArea.getText());
 				TranspositionKey key= new TranspositionKey(keyField.getText());
 				tCrypter.decrypt(t, key);
-				plainTextArea.setText(t.getContentOfText());
+				decryptedAreaFirstTab.setText(t.getContentOfText());
 				cipherChooser.getSelectionModel().select(1);
 				keyLengthChooser.getSelectionModel().select(key.getKey().length-4);
 			}
@@ -202,7 +221,7 @@ public class FirstPageController {
 				Text t=new Text(cryptetTextArea.getText(),lang);
 
 				Text dec=sCrypter.decrypt(t, key);
-				plainTextArea.setText(dec.getContentOfText());
+				decryptedAreaFirstTab.setText(dec.getContentOfText());
 				cipherChooser.getSelectionModel().select(0);
 			}
 		}
@@ -241,13 +260,6 @@ public class FirstPageController {
 								new SimpleIntegerProperty(map.get(s))));
 			}
 
-
-
-		
-
-
-
-
 		}
 
 		@FXML public void startDecodingByGenetic(ActionEvent event) {
@@ -267,13 +279,11 @@ public class FirstPageController {
 			        	world.generate();
 			        	System.out.println(world.getBestCreatureOnWholeWorld().getDna().getKeyString()+" "+world.getBestCreatureOnWholeWorld().getMark());
 			            updateProgress(i, max);
-			   
-			    
-			            
+
 			        }
 			        return null;
 			    }
-	
+
 			    @Override
 			    protected void succeeded() {
 			     	Platform.runLater(new Runnable() {
@@ -286,29 +296,30 @@ public class FirstPageController {
 	 						decodedKeyField.setText(best.getDna().getKeyString());
 	 						generationNumber.setText(world.getWorldGeneration()+"");
 	 						updatePointsFor(best);
-	        		   }                                     
-	        		});  
+	        		   }
+	        		});
 			    	super.succeeded();
-			    	
-			    	
+
+
 			    }
 			};
-			progressBar.progressProperty().bind(task.progressProperty());	
-		
+			progressBar.progressProperty().bind(task.progressProperty());
+
 			new Thread(task).start();
 
 
-		
-			
+
+
 
 		}
-		
+
 	private void updatePointsFor(Creature c){
 		pointsFor.getItems().clear();
 		pointsFor.getItems().addAll(c.getPoints().keySet());
 	}
 
 		private void initializeFitnessFunctions() {
+			fitnessFunctions.clear();
 			fitnessFunctions.add(fitnesserOnlyFrequentWord);
 			fitnessFunctions.add(fitnesserOnlyNgrams);
 		}
@@ -321,7 +332,7 @@ public class FirstPageController {
 		private Crypter crypterBasedDna(Creature c){
 			if(c.getDna() instanceof SubstitutionKey){
 				return sCrypter;
-		
+
 			}
 			if(c.getDna() instanceof TranspositionKey){
 				return tCrypter;
@@ -332,6 +343,64 @@ public class FirstPageController {
 	private void initWorld(){
 		world.setTextToBreak(new Text(textToDBreak.getText()));
 	}
+
+	@FXML public void markText() {
+		initializeFitnessFunctions();
+		FitnessMaker selected=fitnessFunctions.get(fitnessByCombo.getSelectionModel().getSelectedIndex());
+
+		Creature c=new Creature(new Text(cryptetTextArea.getText()), new TranspositionKey(5));
+
+
+
+		selected.testCreatureInLife(c);
+
+		markLabel.setText(""+c.getMark());
+
+
+
+
+
+
+
+
+	}
+
+
+
+
+
+
+	private Key createRightKey(String x){
+		if(isInteger(x)){
+		return	new TranspositionKey(keyField.getText());
+		}
+		return new SubstitutionKey(keyField.getText().split(","));
+	}
+	private Crypter createRightCrypter(String x){
+		if(isInteger(x)){
+		return	tCrypter;
+		}
+		return sCrypter;
+	}
+
+	public static boolean isInteger(String s) {
+	    try {
+	        Integer.parseInt(s);
+	    } catch(NumberFormatException e) {
+	        return false;
+	    } catch(NullPointerException e) {
+	        return false;
+	    }
+	    // only got here if we didn't return false
+	    return true;
+	}
+
+
+
+
+
+
+
 
 
 

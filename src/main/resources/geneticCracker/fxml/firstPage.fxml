@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="1337.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geneticCracker.controller.FirstPageController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="1337.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geneticCracker.controller.FirstPageController">
    <children>
       <TabPane prefHeight="600.0" prefWidth="1336.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -13,7 +13,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="1094.0">
                      <children>
-                        <TextArea fx:id="plainTextArea" layoutX="73.0" layoutY="56.0" prefHeight="317.0" prefWidth="469.0" wrapText="true" />
+                        <TextArea fx:id="plainTextArea" layoutX="73.0" layoutY="56.0" prefHeight="317.0" prefWidth="369.0" wrapText="true" />
                         <GridPane layoutX="90.0" layoutY="383.0" prefHeight="174.0" prefWidth="521.0">
                           <columnConstraints>
                             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -33,10 +33,10 @@
                               <Button fx:id="cryptButton" mnemonicParsing="false" onAction="#crypt" prefHeight="25.0" prefWidth="199.0" text="szyfruj" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
-                        <Label layoutX="259.0" layoutY="39.0" text="Tekst jawny" />
-                        <TextArea fx:id="cryptetTextArea" layoutX="595.0" layoutY="56.0" prefHeight="317.0" prefWidth="469.0" wrapText="true" />
-                        <Label layoutX="799.0" layoutY="39.0" text="Tekst zaszyfrowany" />
-                        <GridPane layoutX="596.0" layoutY="398.0" prefHeight="112.0" prefWidth="467.0">
+                        <Label layoutX="196.0" layoutY="39.0" text="Tekst jawny" />
+                        <TextArea fx:id="cryptetTextArea" layoutX="492.0" layoutY="56.0" prefHeight="317.0" prefWidth="413.0" wrapText="true" />
+                        <Label layoutX="648.0" layoutY="39.0" text="Tekst zaszyfrowany" />
+                        <GridPane layoutX="492.0" layoutY="383.0" prefHeight="112.0" prefWidth="414.0">
                           <columnConstraints>
                             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="229.0" minWidth="10.0" prefWidth="108.0" />
                             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="422.0" minWidth="10.0" prefWidth="359.0" />
@@ -50,6 +50,26 @@
                               <Label text="klucz" />
                               <TextField fx:id="keyField" GridPane.columnIndex="1" />
                               <Button mnemonicParsing="false" onAction="#decrypt" prefHeight="25.0" prefWidth="206.0" text="Deszyfruj" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                        <TextArea fx:id="decryptedAreaFirstTab" layoutX="969.0" layoutY="56.0" prefHeight="318.0" prefWidth="344.0" wrapText="true" />
+                        <Label layoutX="1131.0" layoutY="39.0" text="Tekst odszyfrowany" />
+                        <GridPane layoutX="1006.0" layoutY="409.0" prefHeight="86.0" prefWidth="295.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="110.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="146.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Ocena: " />
+                              <Label fx:id="markLabel" text="Label" GridPane.columnIndex="1" />
+                              <Label text="Funckja oceniajaca " GridPane.rowIndex="1" />
+                              <ComboBox fx:id="markFunctions" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button fx:id="markDecryptedText" mnemonicParsing="false" prefHeight="25.0" prefWidth="101.0" text="Ocen" GridPane.columnIndex="1" GridPane.rowIndex="2" onAction="#markText"/>
                            </children>
                         </GridPane>
                      </children>

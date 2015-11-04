@@ -68,7 +68,7 @@ public class World {
 		populationTranspositionEnglish = new Population();
 		textToBreak.setLanguage(langs.getEnglish());
 		populationTranspositionEnglish
-				.setCreatures(creatureGenerator.generateCreaturesTransposition(size, textToBreak,5,6));
+				.setCreatures(creatureGenerator.generateCreaturesTransposition(size, textToBreak,3,3));
 		populations.add(populationTranspositionEnglish);
 		markFirstPopulation();
 

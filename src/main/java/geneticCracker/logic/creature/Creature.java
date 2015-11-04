@@ -11,6 +11,7 @@ public class Creature implements Comparable<Creature> {
 	private Double mark;
 	private TreeMap<String,Integer> points;
 	private String Originalmsg;
+	
 
 
 
