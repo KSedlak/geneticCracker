@@ -1,5 +1,7 @@
 package geneticCracker.logic.DNA;
 
+import java.util.Arrays;
+
 import geneticCracker.logic.cryptModules.transpositionKeyGenerator.TranspositionKeyGenerator;
 
 
@@ -66,7 +68,8 @@ this.key=s;
 	}
 
 	public void setKey(Object[] key) {
-		this.key = (Integer[]) key;
+		Integer[] stringArray = Arrays.copyOf(key, key.length, Integer[].class);
+		this.key=stringArray;
 
 	}
 

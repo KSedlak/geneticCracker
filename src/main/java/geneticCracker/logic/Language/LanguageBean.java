@@ -1,5 +1,6 @@
 package geneticCracker.logic.Language;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -16,22 +17,24 @@ public class LanguageBean {
 	private Language polish;
 	private Language english;
 
-
+private List<Language>avLangs;
 
 	public LanguageBean() {
 		super();
+		avLangs=new ArrayList<Language>();
 		String[] engAlphabet={"A","B","C","D","E","F","G","H","I","J","K","L",
 				"M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
 
 		english=new Language("english",new Alphabet(engAlphabet));
 
 		String[] plAlphabet={"A","B","C","D","E","F","G","H","I","J","K","L",
-				"M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+				"M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","x"};
 
 		polish=new Language("polish",new Alphabet(plAlphabet));
 
 
-
+		avLangs.add(english);
+		avLangs.add(polish);
 
 	}
 
@@ -47,6 +50,18 @@ public class LanguageBean {
 		return english;
 	}
 
+
+	public Language getLangBasedOnAlphabet(String [] letters){
+Boolean yes=true;
+		for(Language l:avLangs){
+			yes=true;
+			if(letters.length==l.getAlphabet().getAlphabet().length){
+				return l;
+			}
+
+		}
+		return english;
+	}
 
 	public Language getLanguageFromString(String s){
 

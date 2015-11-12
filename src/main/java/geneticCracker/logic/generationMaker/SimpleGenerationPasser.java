@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,21 +21,26 @@ public class SimpleGenerationPasser implements generationPasser{
 	@Autowired
 	SimpleRandomCross crosser;
 
-
+	private Logger logger=Logger.getLogger(getClass());
 	double percentElite=40;
 	@Override
 	public List<Creature> makeNewGeneration(List<Creature> old,  FitnessMaker fit) {
 
-
+		logger.info("\nSTART making new generation");
 			int size=old.size();
 
 			int eliteNumberIndexes=(int) (old.size()*percentElite/100);
 
+			int aP=0;
+			int bP=0;
 			do{
-			Creature good=old.get(ThreadLocalRandom.current().nextInt(0,eliteNumberIndexes+1));
-			Creature second=old.get(ThreadLocalRandom.current().nextInt(0,old.size()));
+				do{
+					aP=ThreadLocalRandom.current().nextInt(0,eliteNumberIndexes+1);
+					bP=ThreadLocalRandom.current().nextInt(0,old.size());
 
-			old.addAll(crosser.makeChild(good, second,fit));
+					}while(aP==bP);
+				logger.info("\n get child from A:"+aP+" B:"+bP);
+			old.addAll(crosser.makeChild(old.get(aP), old.get(bP),fit));
 
 			}while(old.size()<(2*size));
 
@@ -45,7 +51,7 @@ public class SimpleGenerationPasser implements generationPasser{
 				}
 			});
 			Collections.reverse(old);
-			
+
 
 
 			return old.stream().limit(size).collect(Collectors.toList());
@@ -53,6 +59,7 @@ public class SimpleGenerationPasser implements generationPasser{
 
 
 		}
+
 	}
 
 

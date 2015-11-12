@@ -25,11 +25,11 @@ public class SubstitionCrypterTest {
 		//given
 		String[] engAlphabet={"A","B","C","D","E","F","G","H","I","J","K","L",
 				"M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-		Text t=new Text("ALA MA KOTA",new Language("eng", new Alphabet(engAlphabet)));
+		Text t=new Text("ALA MA KOTA");
 
 		String[] engAlphabetChanged={"B","A","C","D","E","F","G","H","I","J","K","L",
 				"M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-		Key k = new SubstitutionKey(engAlphabetChanged);
+		Key k = new SubstitutionKey(engAlphabetChanged, new Language("e", new Alphabet(engAlphabet)));
         SubstitiutionCrypter crypter =new SusbstitutionCrypterImpl();
 		//when
 		crypter.crypt(t, k);
@@ -43,16 +43,16 @@ public class SubstitionCrypterTest {
 		//given
 		String[] engAlphabet={"A","B","C","D","E","F","G","H","I","J","K","L",
 				"M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-		Text t=new Text("BLB MB KOTB",new Language("eng", new Alphabet(engAlphabet)));
+		Text t=new Text("BLB MB KOTB");
 
 		String[] engAlphabetChanged={"B","A","C","D","E","F","G","H","I","J","K","L",
 				"M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-		Key k = new SubstitutionKey(engAlphabetChanged);
+		Key k = new SubstitutionKey(engAlphabetChanged, new Language("e", new Alphabet(engAlphabet)));
         SubstitiutionCrypter crypter =new SusbstitutionCrypterImpl();
 		//when
-		crypter.decrypt(t, k);
+		Text dec=crypter.decrypt(t, k);
 		//then
-		Assert.assertEquals("ALA MA KOTA", t.getContentOfText());
+		Assert.assertEquals("ALA MA KOTA", dec.getContentOfText());
 	}
 
 

@@ -6,6 +6,6 @@ public interface Key {
 	public Object[] getKey();
 	public void setKey(Object[] key);
 	public Key getCopy();
-	
+
 	public String getKeyString();
 }

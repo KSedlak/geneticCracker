@@ -1,26 +1,33 @@
 package geneticCracker.logic.DNA;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+
+import org.apache.log4j.Logger;
 
 import geneticCracker.logic.Language.Language;
 
 public class SubstitutionKey implements Key{
 	String[] key;
-
+	private Logger logger=Logger.getLogger(getClass());
 	Language language;
 
 
 	public SubstitutionKey(String[] key) {
 		super();
 		this.key = key;
+
 	}
 	public SubstitutionKey(Language l) {
 		super();
 		this.language=l;
 		generateRandom();
 	}
+
+
+
 	public SubstitutionKey(String[] key,Language l) {
 		super();
 		this.language=l;
@@ -69,7 +76,8 @@ public class SubstitutionKey implements Key{
 	}
 
 	public void setKey(Object[] key) {
-		this.key = (String[]) key;
+		String[] stringArray = Arrays.copyOf(key, key.length, String[].class);
+		this.key=stringArray;
 	}
 	public String[] getRandomVariation(String [] alphabet){
 		String[] mixed = new String[alphabet.length];

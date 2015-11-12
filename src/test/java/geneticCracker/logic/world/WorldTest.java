@@ -16,11 +16,11 @@ public class WorldTest {
 		World w=new World();
 		String[] engAlphabet={"A","B","C","D","E","F","G","H","I","J","K","L",
 				"M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-		Text t=new Text("ALA MA KOTA",new Language("eng", new Alphabet(engAlphabet)));
+		Text t=new Text("ALA MA KOTA");
 		//when
 
 		//then
-		
+
 	}
 
 }

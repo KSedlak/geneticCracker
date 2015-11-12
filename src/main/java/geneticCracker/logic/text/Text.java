@@ -8,19 +8,16 @@ public class Text {
 
 
 	private String contentOfText;
-	private Language language;
 
 
-	public Text(String contentOfText, Language l) {
-		super();
-		this.contentOfText = contentOfText;
-		language=l;
 
-	}
 	public Text(String contentOfText) {
 		super();
 		this.contentOfText = contentOfText;
+
+
 	}
+
 
 	public String getContentOfText() {
 		return contentOfText;
@@ -29,13 +26,7 @@ public class Text {
 		this.contentOfText = contentOfText;
 	}
 
-	public Language getLanguage() {
-		return language;
-	}
 
-	public void setLanguage(Language language) {
-		this.language = language;
-	}
 
 
 

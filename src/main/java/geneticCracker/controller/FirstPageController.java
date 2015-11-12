@@ -212,8 +212,9 @@ public class FirstPageController {
 
 		if (cipherChooser.getSelectionModel().getSelectedIndex() == 0) {
 			Language lang = language.getLanguageFromString(plainTextArea.getText());
-			Text t = new Text(plainTextArea.getText(), lang);
+
 			SubstitutionKey key = new SubstitutionKey(lang);
+			Text t = new Text(plainTextArea.getText());
 			sCrypter.crypt(t, key);
 			keyField.setText(key.getKeyString());
 			cryptetTextArea.setText(t.getContentOfText());
@@ -237,12 +238,12 @@ public class FirstPageController {
 
 		if (keyField.getText().contains("A")) {
 			Language lang = language.getEnglish();
-			SubstitutionKey key = new SubstitutionKey(keyField.getText().split(","));
+
 			if (keyField.getText().contains("Ż")) {
 				lang = language.getPolish();
 			}
-
-			Text t = new Text(cryptetTextArea.getText(), lang);
+			SubstitutionKey key = new SubstitutionKey(keyField.getText().split(","),lang);
+			Text t = new Text(cryptetTextArea.getText());
 
 			Text dec = sCrypter.decrypt(t, key);
 			decryptedAreaFirstTab.setText(dec.getContentOfText());
@@ -299,9 +300,22 @@ public class FirstPageController {
 				int i;
 				for (i = 1; i <= max; i++) {
 					world.generate();
-					System.out.println(world.getBestCreatureOnWholeWorld().getDna().getKeyString() + " "
-							+ world.getBestCreatureOnWholeWorld().getMark());
+				//	System.out.println(world.getBestCreatureOnWholeWorld().getDna().getKeyString() + " "
+				//			+ world.getBestCreatureOnWholeWorld().getMark());
 					updateProgress(i, max);
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							best = world.getBestCreatureOnWholeWorld();
+							decoded = crypterBasedDna(best)
+									.decrypt(new Text(textToDBreak.getText()), best.getDna());
+							decryptedTEXT.setText(decoded.getContentOfText());
+							bestFitMark.setText(best.getMark() + "");
+							decodedKeyField.setText(best.getDna().getKeyString());
+							generationNumber.setText(world.getWorldGeneration() + "");
+							updatePointsFor(best);
+						}
+					});
 
 				}
 				return null;
@@ -314,7 +328,7 @@ public class FirstPageController {
 					public void run() {
 						best = world.getBestCreatureOnWholeWorld();
 						decoded = crypterBasedDna(best)
-								.decrypt(new Text(textToDBreak.getText(), best.getText().getLanguage()), best.getDna());
+								.decrypt(new Text(textToDBreak.getText()), best.getDna());
 						decryptedTEXT.setText(decoded.getContentOfText());
 						bestFitMark.setText(best.getMark() + "");
 						decodedKeyField.setText(best.getDna().getKeyString());
@@ -362,11 +376,10 @@ public class FirstPageController {
 	public void markText() {
 		initializeFitnessFunctions();
 		FitnessMaker selected = fitnessFunctions.get(markFunctions.getSelectionModel().getSelectedIndex());
-
-		Creature c = new Creature(new Text(cryptetTextArea.getText()), new TranspositionKey(5));
-
+		String x=keyField.getText().split(",")[0];
+		Key key= createRightKey(x);
+		Creature c = new Creature(new Text(cryptetTextArea.getText()),key);
 		selected.testCreatureInLife(c);
-
 		markLabel.setText("" + c.getMark());
 		updatePointsFor(c);
 
@@ -376,13 +389,18 @@ public class FirstPageController {
 		if (isInteger(x)) {
 			return new TranspositionKey(keyField.getText());
 		}
-		return new SubstitutionKey(keyField.getText().split(","));
+		String[] b=keyField.getText().split(",");
+		Language l=language.getLangBasedOnAlphabet(b);
+		return new SubstitutionKey(b,l);
 	}
 
 	private Crypter createRightCrypter(String x) {
 		if (isInteger(x)) {
 			return tCrypter;
 		}
+
+
+
 		return sCrypter;
 	}
 

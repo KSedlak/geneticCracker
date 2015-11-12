@@ -11,7 +11,7 @@ public class Creature implements Comparable<Creature> {
 	private Double mark;
 	private TreeMap<String,Integer> points;
 	private String Originalmsg;
-	
+
 
 
 
@@ -21,6 +21,7 @@ public class Creature implements Comparable<Creature> {
 		Originalmsg=text.getContentOfText();
 		this.dna = dna;
 		points=new TreeMap<String,Integer>();
+
 	}
 
 	public TreeMap<String, Integer> getPoints() {
@@ -37,7 +38,7 @@ public class Creature implements Comparable<Creature> {
 	public void setText(Text text) {
 		this.text = text;
 	}
-	
+
 	public String getOriginalmsg() {
 		return Originalmsg;
 	}
@@ -62,6 +63,11 @@ public class Creature implements Comparable<Creature> {
 	@Override
 	public int compareTo(Creature o) {
 		return Double.compare(this.mark, o.getMark());
+	}
+
+	@Override
+	public String toString() {
+		return "Creature [key: "+dna.getKeyString()+" mark: "+mark+ "]";
 	}
 
 

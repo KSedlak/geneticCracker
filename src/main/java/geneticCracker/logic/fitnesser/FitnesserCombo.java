@@ -1,5 +1,8 @@
 package geneticCracker.logic.fitnesser;
 
+
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,9 +23,10 @@ import geneticCracker.logic.cryptModules.transpsitionCrypter.TranspositionCrypte
 import geneticCracker.logic.languageAnalyzer.LanguageAnalyzer;
 import geneticCracker.logic.ngramer.Ngramer;
 import geneticCracker.logic.text.Text;
+import geneticCracker.logic.wordMapper.WordMapper;
 
 @Component
-public class FitnesserOnlyNgrams implements FitnessMaker {
+public class FitnesserCombo implements FitnessMaker {
 
 	@Autowired
 	SubstitiutionCrypter sCrypter;
@@ -32,6 +36,8 @@ public class FitnesserOnlyNgrams implements FitnessMaker {
 	@Autowired
 	TranspositionCrypter tCrypter;
 
+	@Autowired
+	WordMapper wordMapper;
 	@Autowired
 	LanguageAnalyzer languageSpec;
 
@@ -43,14 +49,22 @@ public class FitnesserOnlyNgrams implements FitnessMaker {
 	private Crypter crypter;
 
 	private Key k;
-
-	private FitnesserOnlyNgrams() {
+	private List<String> freqEng;
+	private FitnesserCombo() {
 
 	}
 
 	@PostConstruct
 	public void loadData(){
 		map=languageSpec.getGlobalFrequencyMap("text/learn/eng/txt", 3);
+
+
+			try {
+				freqEng=languageSpec.getMostFrequentWords("eng",100);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 
 	}
@@ -77,7 +91,7 @@ public class FitnesserOnlyNgrams implements FitnessMaker {
 	private double markText(Creature c, Crypter crypt){
 		logger.info("mark Text");
 Text dec=crypt.decrypt(c.getText(), c.getDna());
-
+LinkedHashMap<String, Integer> words=wordMapper.wordMappingText(dec.getContentOfText());
 logger.info("\nOddeszyfrowany Tekst:");
 logger.info(dec.getContentOfText());
 
@@ -100,6 +114,12 @@ print=check;
 			res=res+currentPKT;
 		}
 
+		for(String word:words.keySet()){
+			if(freqEng.contains(word)){
+			res=res+(words.get(word)*100);
+					};
+
+		}
 
 //		System.out.println(dec.getContentOfText().substring(0, 10)+" "+c.getDna().getKeyString()+" "+res);
 	}
@@ -122,3 +142,4 @@ print=check;
 	}
 
 }
+

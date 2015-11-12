@@ -12,20 +12,18 @@ public class NgramerImpl  implements Ngramer{
 
 	@Override
 	public LinkedHashMap<String, Integer> ngramText(String s, int length,LinkedHashMap<String, Integer> map) {
-		String newline = System.getProperty("line.separator");
+
 		String ngramValue="";
-		for(int i=0;i<s.length();i++){
+		int lastidx=s.length()-length;
+		int idx=0;
+		do{
+		for(int i=idx;i<idx+length;i++){
 			ngramValue=ngramValue+s.charAt(i);
-
-		
-
-			if(ngramValue.length()==length){
-				if(!ngramValue.contains(newline)){
-				addToMap(ngramValue, map);}
-				ngramValue="";
-			}
-
 		}
+		addToMap(ngramValue, map);
+		ngramValue="";
+		idx++;
+		}while(idx<=lastidx);
 
 		return map;
 	}
@@ -40,11 +38,11 @@ public class NgramerImpl  implements Ngramer{
 			map.replace(s, value+1);
 			return s;
 		}
-		map.put(s, 1);
+		map.put(s.toUpperCase(), 1);
 
 		return s;
 	}
-	
+
 
 }
 

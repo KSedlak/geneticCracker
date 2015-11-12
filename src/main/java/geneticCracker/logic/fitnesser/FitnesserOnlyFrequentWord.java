@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import geneticCracker.logic.DNA.Key;
@@ -25,22 +27,23 @@ public class FitnesserOnlyFrequentWord implements FitnessMaker {
 
 	@Autowired
 	TranspositionCrypter tCrypter;
-	
+
 	@Autowired
 	LanguageAnalyzer languageSpec;
-	
+
 	private List<String> freqEng;
 
 	private Key k;
 
 	private Crypter crypter;
-	
 
-	
+
+
+	private Logger logger=Logger.getLogger(getClass());
 	private FitnesserOnlyFrequentWord() {
 
 	}
-	
+
 	@PostConstruct
 	public void loadData(){
 		try {
@@ -50,10 +53,10 @@ public class FitnesserOnlyFrequentWord implements FitnessMaker {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void testCreatureInLife(Creature creature) {
-	
+logger.info("Fitness mark");
 		k=creature.getDna();
 		if(k instanceof TranspositionKey){
 			crypter=tCrypter;
@@ -61,16 +64,16 @@ public class FitnesserOnlyFrequentWord implements FitnessMaker {
 		if(k instanceof SubstitutionKey){
 			crypter=sCrypter;
 		}
-		
+
 		Double mark=markText(creature, crypter);
 
-				
+
 		creature.setMark(mark);
-		
+
 	}
 
 	private double markText(Creature c, Crypter crypt){
-		
+
 Text dec=crypt.decrypt(c.getText(), c.getDna());
 		String mapped;
 		String check="";
@@ -82,12 +85,12 @@ Text dec=crypt.decrypt(c.getText(), c.getDna());
 
 		addToMap(mapped,c.getPoints());
 	}
-		
+
 	}
 		return res;
 	}
 
-	
+
 
 
 	private void addToMap(String s, TreeMap<String, Integer> points){
@@ -96,12 +99,12 @@ Text dec=crypt.decrypt(c.getText(), c.getDna());
 			val=points.get(s);
 		}
 		points.put(s, val+1);
-		
+
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 }

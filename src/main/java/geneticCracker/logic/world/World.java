@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,6 +44,8 @@ public class World {
 
 	private int worldGeneration;
 
+	private Logger logger=Logger.getLogger(getClass());
+
 	private Population populationTranspositionEnglish;
 
 	public World() {
@@ -58,15 +61,23 @@ public class World {
 	}
 
 	public void start(int size, FitnessMaker maker) {
-		worldGeneration = 0;
+	logger.info("World startet");
+
+	logger.info("Text to break:");
+
+	logger.info(textToBreak.getContentOfText()+"\n");
+	logger.info("\nFunkcja sprawdzajaca: "+maker);
+	worldGeneration = 0;
 		fitnesMaker = maker;
+
+		logger.info("\nGeenracja populacji ENG SUBSTITUTION\n");
+
 		populationSubstitionEnglish = new Population();
-		textToBreak.setLanguage(langs.getEnglish());
-		populationSubstitionEnglish.setCreatures(creatureGenerator.generateCreaturesSubstititution(size, textToBreak));
+		populationSubstitionEnglish.setCreatures(creatureGenerator.generateCreaturesSubstititution(size, textToBreak,langs.getEnglish()));
 		populations.add(populationSubstitionEnglish);
 
+		logger.info("\nGeenracja populacji TRANSPOSITION\n");
 		populationTranspositionEnglish = new Population();
-		textToBreak.setLanguage(langs.getEnglish());
 		populationTranspositionEnglish
 				.setCreatures(creatureGenerator.generateCreaturesTransposition(size, textToBreak,3,3));
 		populations.add(populationTranspositionEnglish);
@@ -76,11 +87,12 @@ public class World {
 
 	private void markFirstPopulation() {
 		Creature c;
-
+		logger.info("\nOCENA PIERWSZYCH OSOBNIKOW\n");
 		for (Population p : populations) {
 			for (int i = 0; i < p.getCreatures().size(); i++) {
 				c = p.getCreatures().get(i);
 				fitnesMaker.testCreatureInLife(c);
+				logger.info(c);
 			}
 			Collections.sort(p.getCreatures());
 			Collections.reverse(p.getCreatures());
@@ -88,6 +100,8 @@ public class World {
 	}
 
 	public void generate() {
+
+		logger.info("\nGeneracja "+worldGeneration+ "\n");
 		for (Population p : populations) {
 		p.setCreatures(
 				generationManager.makeNewGeneration(p.getCreatures(), fitnesMaker));

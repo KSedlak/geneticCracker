@@ -3,6 +3,7 @@ package geneticCracker.logic.mutator.Impl;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import geneticCracker.logic.DNA.Key;
@@ -14,16 +15,17 @@ public class Mutator  implements geneticCracker.logic.mutator.Mutator{
 
 	double percent=30;
 
+	private Logger logger=Logger.getLogger(getClass());
 	double percentBound=10;
 
 	@Override
 	public Creature mutate(Creature c) {
 
-		if(ThreadLocalRandom.current().nextInt(0,101)<percentBound){;
+		if(ThreadLocalRandom.current().nextInt(0,101)<=percentBound){;
 
 
 		Key dna=c.getDna();
-
+		logger.info("mutated");
 		Object[] table=dna.getKey();
 		int numberToMutate=(int)((percent*table.length)/100);
 		List<Integer> listIndexes =RadnomIndexesGenerator.generateRandomIndexes(numberToMutate, table.length-1);
@@ -44,6 +46,8 @@ public class Mutator  implements geneticCracker.logic.mutator.Mutator{
 
 		dna.setKey(table);
 		c.setDna(dna);
+		logger.info("mutated end");
+
 		}
 
 		return c;

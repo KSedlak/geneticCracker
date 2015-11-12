@@ -5,6 +5,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import org.aspectj.weaver.tools.cache.AsynchronousFileCacheBacking.ClearCommand;
+
 import geneticCracker.App;
 
 public class fileToString {
@@ -28,7 +31,7 @@ public static String getFileFromDirectory(String dir){
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	  return content.toUpperCase();
+	  return clearString(content);
 }
 
 
@@ -41,9 +44,14 @@ try {
 	// TODO Auto-generated catch block
 	e.printStackTrace();
 }
-  return content;
+  return  clearString(content);
 }
 
+private static String clearString(String x){
+	String res=x.replaceAll("[^a-zA-Z ]", "");
+	res=res.replaceAll(System.getProperty("line.separator"), " ");
 
+			return res.toUpperCase();
+}
 
 }
