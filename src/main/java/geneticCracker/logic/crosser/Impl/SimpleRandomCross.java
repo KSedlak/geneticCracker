@@ -38,6 +38,10 @@ public class SimpleRandomCross implements Crosser {
 			List<Integer> indexes=RadnomIndexesGenerator.
 					generateRandomIndexes(ThreadLocalRandom.current().nextInt(1,dnaLength),dnaLength-1);
 			logger.info("Indeexes generated");
+			logger.info("Crosser:");
+			logger.info("ParentA: "+a);
+			logger.info("ParentB: "+b);
+
 
 	Key dnaA=a.getDna().getCopy();
 	Key dnaB=b.getDna().getCopy();
@@ -49,7 +53,6 @@ public class SimpleRandomCross implements Crosser {
 	Object[] bTable=new Object[dnaA.getKey().length];
 	List<Object> childAddedB=new ArrayList<Object>();
 	for(Integer idx:indexes){
-		logger.info("Copy: "+(idx));
 		childAddedA.add(dnaB.getKey()[idx]);
 
 		aTable[idx]=dnaB.getKey()[idx];
@@ -58,6 +61,12 @@ public class SimpleRandomCross implements Crosser {
 
 	}
 	logger.info("Table init");
+/*	logger.info("A tab");
+	logTable(aTable);
+
+	logger.info("b tab");
+*/
+	logTable(bTable);
 
 List<Object> av1=new ArrayList<Object>();
 for(Object o:dnaA.getKey()){
@@ -76,15 +85,28 @@ for(int i=0;i<aTable.length;i++){
 
 	if(aTable[i]==null){
 		aTable[i]=av1.remove(0);
-
+		logger.info("A kopiuje");
+	}
+	else{
+		logger.info("A jest");
 	}
 	if(bTable[i]==null){
 		bTable[i]=av2.remove(0);
+		logger.info("B kopiuje");
+	}
+	else{
+		logger.info("B jest");
 	}
 
 
 //logger.info("A: "+aTable[i]+" B: "+bTable[i]);
 }
+/*logger.info("A tab");
+logTable(aTable);
+
+logger.info("b tab");
+
+logTable(bTable);*/
 logger.info("Generated");
 
 dnaA.setKey(aTable);
@@ -125,5 +147,11 @@ private int addToUniqueList(List<Object> lis, Object o){
 	return lis.size();
 }
 
-
+private void logTable(Object[] x){
+	String res="";
+	for(Object o:x){
+		res=res+" "+o;
+	}
+	logger.info(res);
+}
 }

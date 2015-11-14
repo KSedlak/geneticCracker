@@ -38,7 +38,7 @@ public class SimpleGenerationPasser implements generationPasser{
 					aP=ThreadLocalRandom.current().nextInt(0,eliteNumberIndexes+1);
 					bP=ThreadLocalRandom.current().nextInt(0,old.size());
 
-					}while(aP==bP);
+					}while(aP==bP || old.get(aP).getDna().getKey().length!=old.get(bP).getDna().getKey().length);
 				logger.info("\n get child from A:"+aP+" B:"+bP);
 			old.addAll(crosser.makeChild(old.get(aP), old.get(bP),fit));
 
