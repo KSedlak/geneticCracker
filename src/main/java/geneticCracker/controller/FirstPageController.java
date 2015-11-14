@@ -19,6 +19,7 @@ import geneticCracker.logic.cryptModules.Crypter;
 import geneticCracker.logic.cryptModules.substitution.crypter.SubstitiutionCrypter;
 import geneticCracker.logic.cryptModules.transpsitionCrypter.TranspositionCrypter;
 import geneticCracker.logic.fitnesser.FitnessMaker;
+import geneticCracker.logic.fitnesser.FitnesserCombo;
 import geneticCracker.logic.fitnesser.FitnesserOnlyFrequentWord;
 import geneticCracker.logic.fitnesser.FitnesserOnlyNgrams;
 import geneticCracker.logic.languageAnalyzer.LanguageAnalyzer;
@@ -134,10 +135,15 @@ public class FirstPageController {
 	List<FitnessMaker> fitnessFunctions;
 	@FXML
 	ListView pointsFor;
+
 	@Autowired
 	FitnesserOnlyFrequentWord fitnesserOnlyFrequentWord;
+
 	@Autowired
 	FitnesserOnlyNgrams fitnesserOnlyNgrams;
+
+	@Autowired
+	FitnesserCombo fitnesserCombo;
 
 	private FitnessMaker fitnesser;
 
@@ -160,6 +166,7 @@ public class FirstPageController {
 
 		markFunctions.getItems().add("By Word Freq");
 		markFunctions.getItems().add("By Ngram Freq");
+		markFunctions.getItems().add("By Both");
 		markFunctions.getSelectionModel().select(0);
 		initTextFromScratch();
 
@@ -355,6 +362,7 @@ public class FirstPageController {
 		fitnessFunctions.clear();
 		fitnessFunctions.add(fitnesserOnlyFrequentWord);
 		fitnessFunctions.add(fitnesserOnlyNgrams);
+		fitnessFunctions.add(fitnesserCombo);
 	}
 
 	private Crypter crypterBasedDna(Creature c) {

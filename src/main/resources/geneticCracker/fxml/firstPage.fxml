@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="1337.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geneticCracker.controller.FirstPageController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="1337.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geneticCracker.controller.FirstPageController">
    <children>
       <TabPane prefHeight="600.0" prefWidth="1336.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -153,7 +153,7 @@
                         <Button fx:id="nextGenearationNumber" layoutX="1020.0" layoutY="419.0" mnemonicParsing="false" text="next" />
                         <Label layoutX="961.0" layoutY="44.0" text="Generation" />
                         <Label fx:id="generationNumber" layoutX="1040.0" layoutY="44.0" />
-                        <GridPane layoutX="30.0" layoutY="100.0">
+                        <GridPane layoutX="30.0" layoutY="100.0" prefHeight="90.0" prefWidth="258.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -164,7 +164,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <TextField fx:id="popSizeField" text="500" GridPane.columnIndex="1" />
+                              <TextField fx:id="popSizeField" prefHeight="15.0" prefWidth="144.0" text="500" GridPane.columnIndex="1" />
                               <Label text="population size" />
                               <Label text="geneartions" GridPane.rowIndex="1" />
                               <TextField fx:id="geneartionsNumberInput" text="500" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -172,7 +172,7 @@
                               <ComboBox fx:id="fitnessByCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
-                        <Label layoutX="67.0" layoutY="33.0" text="Parametry">
+                        <Label layoutX="96.0" layoutY="41.0" text="Parametry">
                            <font>
                               <Font size="28.0" />
                            </font>

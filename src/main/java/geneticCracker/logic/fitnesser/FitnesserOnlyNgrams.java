@@ -78,7 +78,7 @@ public class FitnesserOnlyNgrams implements FitnessMaker {
 		logger.info("mark Text");
 Text dec=crypt.decrypt(c.getText(), c.getDna());
 
-logger.info("\nOddeszyfrowany Tekst:");
+logger.info("\nOdszyfrowany Tekst:");
 logger.info(dec.getContentOfText());
 
 LinkedHashMap<String, Integer> decryptedMap=new LinkedHashMap<String,Integer>();

@@ -79,7 +79,7 @@ public class World {
 		logger.info("\nGeenracja populacji TRANSPOSITION\n");
 		populationTranspositionEnglish = new Population();
 		populationTranspositionEnglish
-				.setCreatures(creatureGenerator.generateCreaturesTransposition(size, textToBreak,3,3));
+				.setCreatures(creatureGenerator.generateCreaturesTransposition(size, textToBreak,4,6));
 		populations.add(populationTranspositionEnglish);
 		markFirstPopulation();
 
