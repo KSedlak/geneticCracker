@@ -70,16 +70,16 @@ public class World {
 	worldGeneration = 0;
 		fitnesMaker = maker;
 
-		logger.info("\nGeenracja populacji ENG SUBSTITUTION\n");
+		logger.info("\nGenracja populacji ENG SUBSTITUTION\n");
 
 		populationSubstitionEnglish = new Population();
 		populationSubstitionEnglish.setCreatures(creatureGenerator.generateCreaturesSubstititution(size, textToBreak,langs.getEnglish()));
 		populations.add(populationSubstitionEnglish);
 
-		logger.info("\nGeenracja populacji TRANSPOSITION\n");
+		logger.info("\nGenracja populacji TRANSPOSITION\n");
 		populationTranspositionEnglish = new Population();
 		populationTranspositionEnglish
-				.setCreatures(creatureGenerator.generateCreaturesTransposition(size, textToBreak,4,6));
+				.setCreatures(creatureGenerator.generateCreaturesTransposition(size, textToBreak,6,6));
 		populations.add(populationTranspositionEnglish);
 		markFirstPopulation();
 
@@ -87,12 +87,12 @@ public class World {
 
 	private void markFirstPopulation() {
 		Creature c;
-		logger.info("\nOCENA PIERWSZYCH OSOBNIKOW\n");
+		//logger.info("\nOCENA PIERWSZYCH OSOBNIKOW\n");
 		for (Population p : populations) {
 			for (int i = 0; i < p.getCreatures().size(); i++) {
 				c = p.getCreatures().get(i);
 				fitnesMaker.testCreatureInLife(c);
-				logger.info(c);
+				//logger.info(c);
 			}
 			Collections.sort(p.getCreatures());
 			Collections.reverse(p.getCreatures());
@@ -126,7 +126,7 @@ public class World {
 		this.populations = populations;
 	}
 
-	public Creature getBestCreatureOnWholeWorld() {
+	public Creature getBestCreatureOnWholeWorld() throws InterruptedException {
 
 		List<Creature> bestInPopulations = new ArrayList<Creature>();
 
@@ -135,6 +135,12 @@ public class World {
 		}
 		return bestInPopulations.stream().max((c1, c2) -> Double.compare(c1.getMark(), c2.getMark())).get();
 
+	}
+
+
+	public Creature getBestFromPop(int indxPop) throws InterruptedException{
+
+		return populations.get(indxPop).getBestCreatureFromPopulation();
 	}
 
 }

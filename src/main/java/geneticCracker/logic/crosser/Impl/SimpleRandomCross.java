@@ -21,7 +21,7 @@ public class SimpleRandomCross implements Crosser {
 
 
 
-	double crossPoints=40;
+	double crossPoints=50;
 
 
 	@Autowired
@@ -31,16 +31,16 @@ public class SimpleRandomCross implements Crosser {
 
 	@Override
 	public List<Creature> makeChild(Creature a, Creature b, FitnessMaker fit){
-		logger.info("STart child making");
+		//logger.info("STart child making");
 		childs.clear();
 		int dnaLength=b.getDna().getKey().length;
 		int cr=(int) (crossPoints*dnaLength/100);
 			List<Integer> indexes=RadnomIndexesGenerator.
-					generateRandomIndexes(ThreadLocalRandom.current().nextInt(1,dnaLength),dnaLength-1);
-			logger.info("Indeexes generated");
+					generateRandomIndexes(cr,dnaLength-1);
+		//	logger.info("Indeexes generated");
 			logger.info("Crosser:");
-			logger.info("ParentA: "+a);
-			logger.info("ParentB: "+b);
+		logger.info("ParentA: "+a);
+		logger.info("ParentB: "+b);
 
 
 	Key dnaA=a.getDna().getCopy();
@@ -60,13 +60,13 @@ public class SimpleRandomCross implements Crosser {
 		bTable[idx]=dnaA.getKey()[idx];
 
 	}
-	logger.info("Table init");
+//	logger.info("Table init Indexes: "+indexes.size());
 /*	logger.info("A tab");
 	logTable(aTable);
 
 	logger.info("b tab");
 */
-	logTable(bTable);
+//	logTable(bTable);
 
 List<Object> av1=new ArrayList<Object>();
 for(Object o:dnaA.getKey()){
@@ -85,17 +85,17 @@ for(int i=0;i<aTable.length;i++){
 
 	if(aTable[i]==null){
 		aTable[i]=av1.remove(0);
-		logger.info("A kopiuje");
+	//	logger.info("A kopiuje");
 	}
 	else{
-		logger.info("A jest");
+	//	logger.info("A jest");
 	}
 	if(bTable[i]==null){
 		bTable[i]=av2.remove(0);
-		logger.info("B kopiuje");
+	//	logger.info("B kopiuje");
 	}
 	else{
-		logger.info("B jest");
+	//	logger.info("B jest");
 	}
 
 
@@ -107,7 +107,7 @@ logTable(aTable);
 logger.info("b tab");
 
 logTable(bTable);*/
-logger.info("Generated");
+//logger.info("Generated");
 
 dnaA.setKey(aTable);
 dnaB.setKey(bTable);
@@ -117,21 +117,19 @@ dnaB.setKey(bTable);
 		Creature second=new Creature(a.getText(),dnaB);
 
 
-		logger.info("Crosser:");
-		logger.info("ParentA: "+a);
-		logger.info("ParentB: "+b);
+
 
 		childs.add(first);
 		childs.add(second);
-		logger.info("ChildA: "+first);
-		logger.info("ChildB: "+second);
+
 
 
 		for(Creature c:childs){
 			mutator.mutate(c);
 			fit.testCreatureInLife(c);
 		}
-
+		logger.info("Child A: "+first);
+		logger.info("Child B: "+second);
 
 		return new ArrayList<Creature>(childs);
 

@@ -8,7 +8,9 @@ import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
+import org.hamcrest.core.IsNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 import geneticCracker.logic.DNA.Key;
 import geneticCracker.logic.DNA.SubstitutionKey;
@@ -18,10 +20,12 @@ import geneticCracker.logic.cryptModules.Crypter;
 import geneticCracker.logic.cryptModules.substitution.crypter.SubstitiutionCrypter;
 import geneticCracker.logic.cryptModules.transpsitionCrypter.TranspositionCrypter;
 import geneticCracker.logic.languageAnalyzer.LanguageAnalyzer;
+import geneticCracker.logic.markerDB.markerDB;
 import geneticCracker.logic.ngramer.Ngramer;
 import geneticCracker.logic.text.Text;
 
 @Component
+@DependsOn("markerDB")
 public class FitnesserOnlyNgrams implements FitnessMaker {
 
 	@Autowired
@@ -40,6 +44,9 @@ public class FitnesserOnlyNgrams implements FitnessMaker {
 	@Autowired
 	private Ngramer nrammer;
 
+	@Autowired
+	markerDB mChecker;
+
 	private Crypter crypter;
 
 	private Key k;
@@ -57,7 +64,7 @@ public class FitnesserOnlyNgrams implements FitnessMaker {
 
 	@Override
 	public void testCreatureInLife(Creature creature) {
-		logger.info("Under Test");
+		//logger.info("Under Test");
 
 		k=creature.getDna();
 		if(k instanceof TranspositionKey){
@@ -71,15 +78,22 @@ public class FitnesserOnlyNgrams implements FitnessMaker {
 
 
 		creature.setMark(mark);
+		mChecker.addToMap(creature.getDna().getKeyString(), mark);
 
 	}
 
 	private double markText(Creature c, Crypter crypt){
-		logger.info("mark Text");
+	//	logger.info("mark Text");
+
+if(mChecker.alreadyChecked(c.getDna().getKeyString())!=null){
+
+	return mChecker.alreadyChecked(c.getDna().getKeyString());
+}
+else{
 Text dec=crypt.decrypt(c.getText(), c.getDna());
 
-logger.info("\nOdszyfrowany Tekst:");
-logger.info(dec.getContentOfText());
+//logger.info("\nOdszyfrowany Tekst:");
+//logger.info(dec.getContentOfText());
 
 LinkedHashMap<String, Integer> decryptedMap=new LinkedHashMap<String,Integer>();
 nrammer.ngramText(dec.getContentOfText(), 3, decryptedMap);
@@ -105,7 +119,7 @@ print=check;
 	}
 
 	return res;
-
+}
 	}
 	private void addToMap(String s, TreeMap<String, Integer> points){
 		int val=0;

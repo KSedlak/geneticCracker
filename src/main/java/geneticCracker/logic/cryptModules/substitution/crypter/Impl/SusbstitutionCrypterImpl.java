@@ -58,7 +58,7 @@ public class SusbstitutionCrypterImpl implements SubstitiutionCrypter {
 
 	@Override
 	public Text decrypt(Text t, Key k) {
-		logger.info("decrypt text by: "+k.getKeyString());
+		//logger.info("decrypt text by: "+k.getKeyString());
 		generateKeyAndInitMapper((SubstitutionKey) k);
 		BiMap<String, String> reversed = mapper.inverse();
 		String decryptedContent = "";

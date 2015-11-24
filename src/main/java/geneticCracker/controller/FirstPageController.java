@@ -45,6 +45,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 
 @Component
 public class FirstPageController {
@@ -149,6 +153,10 @@ public class FirstPageController {
 
 	private ObservableList<String> pointsForList;
 
+	@FXML LineChart bestCharts;
+	private Series seriesTrans;
+	private Series seriesSub;
+
 	@FXML
 	private void initialize() {
 
@@ -197,6 +205,22 @@ public class FirstPageController {
 
 		pointsFor.setItems(pointsForList);
 		forWhatPointList.setItems(pointsForList);
+
+		   final NumberAxis xAxis = new NumberAxis();
+	        final NumberAxis yAxis = new NumberAxis();
+	        xAxis.setLabel("generation");
+	        //creating the chart
+	       bestCharts =
+	                new LineChart<Number,Number>(xAxis,yAxis);
+
+	       bestCharts.setTitle("Best Creature");
+	        //defining a series
+	     seriesTrans = new XYChart.Series();
+	        seriesTrans.setName("trans");
+	        seriesSub = new XYChart.Series();
+	        seriesSub.setName("trans");
+	        //populating the series with data
+
 
 	}
 
@@ -313,14 +337,31 @@ public class FirstPageController {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							best = world.getBestCreatureOnWholeWorld();
+							try {
+								best = world.getBestCreatureOnWholeWorld();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							decoded = crypterBasedDna(best)
 									.decrypt(new Text(textToDBreak.getText()), best.getDna());
 							decryptedTEXT.setText(decoded.getContentOfText());
 							bestFitMark.setText(best.getMark() + "");
 							decodedKeyField.setText(best.getDna().getKeyString());
+							try { seriesSub.getData().add(new XYChart.Data(world.getWorldGeneration(), world.getBestFromPop(0) ));
+
+									seriesTrans.getData().add(new XYChart.Data(world.getWorldGeneration(), world.getBestFromPop(1) ));
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 							generationNumber.setText(world.getWorldGeneration() + "");
 							updatePointsFor(best);
+
+							bestCharts.getData().clear();
+							bestCharts.getData().add(seriesSub);
+
+
 						}
 					});
 
@@ -333,17 +374,27 @@ public class FirstPageController {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
-						best = world.getBestCreatureOnWholeWorld();
+						try {
+							best = world.getBestCreatureOnWholeWorld();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						decoded = crypterBasedDna(best)
 								.decrypt(new Text(textToDBreak.getText()), best.getDna());
 						decryptedTEXT.setText(decoded.getContentOfText());
 						bestFitMark.setText(best.getMark() + "");
 						decodedKeyField.setText(best.getDna().getKeyString());
 						generationNumber.setText(world.getWorldGeneration() + "");
+
+
+						System.out.println(seriesSub.toString());
 						updatePointsFor(best);
+
 					}
 				});
 				super.succeeded();
+
 
 			}
 		};

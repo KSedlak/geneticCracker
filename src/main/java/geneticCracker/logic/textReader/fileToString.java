@@ -48,8 +48,9 @@ try {
 }
 
 private static String clearString(String x){
-	String res=x.replaceAll("[^a-zA-Z ]", "");
+	String res=x.replaceAll("[^a-zA-Z ]", " ");
 	res=res.replaceAll(System.getProperty("line.separator"), " ");
+	res=res.replaceAll("  ", " ");
 
 			return res.toUpperCase();
 }

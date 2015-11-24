@@ -39,7 +39,7 @@ public class SimpleGenerationPasser implements generationPasser{
 					bP=ThreadLocalRandom.current().nextInt(0,old.size());
 
 					}while(aP==bP || old.get(aP).getDna().getKey().length!=old.get(bP).getDna().getKey().length);
-				logger.info("\n get child from A:"+aP+" B:"+bP);
+			//	logger.info("\n get child from A:"+aP+" B:"+bP);
 			old.addAll(crosser.makeChild(old.get(aP), old.get(bP),fit));
 
 			}while(old.size()<(2*size));
@@ -52,13 +52,18 @@ public class SimpleGenerationPasser implements generationPasser{
 			});
 			Collections.reverse(old);
 
-
+			old.stream().forEach(s->logger.info(s));
 
 			return old.stream().limit(size).collect(Collectors.toList());
 
 
 
 		}
+
+
+
+
+
 
 	}
 

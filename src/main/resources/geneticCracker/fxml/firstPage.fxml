@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -181,6 +182,22 @@
                         <ListView fx:id="pointsFor" layoutX="1136.0" layoutY="63.0" prefHeight="341.0" prefWidth="200.0" />
                         <Label layoutX="1208.0" layoutY="45.0" text="PUNKTY ZA:" />
                      </children></AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="charts">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <LineChart fx:id="bestCharts" layoutX="34.0" layoutY="21.0" prefHeight="465.0" prefWidth="1019.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                     </children>
+                  </AnchorPane>
               </content>
             </Tab>
         </tabs>

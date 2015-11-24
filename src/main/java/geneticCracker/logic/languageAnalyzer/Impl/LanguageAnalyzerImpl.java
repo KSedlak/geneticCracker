@@ -103,16 +103,16 @@ public class LanguageAnalyzerImpl implements LanguageAnalyzer {
 					return o1.getKey().compareTo(o2.getKey())*(-1);
 				}
 				return o1.getValue().compareTo(o2.getValue())*(-1);
-				
+
 			}
 	    });
 
 	    LinkedHashMap<String, Integer> sorted = new LinkedHashMap<>();
-    	
+
     for(Map.Entry<String,Integer> entry: entries){
         sorted.put(entry.getKey(), entry.getValue());
     }
- 
+
     return sorted;
 	}
 	public Ngramer getNgramer() {
@@ -126,7 +126,7 @@ public class LanguageAnalyzerImpl implements LanguageAnalyzer {
 			    .limit(amount)
 			    .map(ent->ent.getKey())
 			    .collect(Collectors.toList());
-		
+
 	}
 
 
@@ -150,18 +150,18 @@ ngramer=ngramerImpl;
 		e.printStackTrace();
 	}
 	Path pa =Files.list(dir).filter(p -> p.getFileName().toString().endsWith(".txt")).findFirst().get();
-	
-
-	
-	  
-	List<String> list = Files.lines(pa).map(s -> s.trim()).limit(limit).collect(Collectors.toList());
 
 
-	
+
+
+	List<String> list = Files.lines(pa).map(s -> s.trim()).map(s->" "+s+" ").limit(limit).collect(Collectors.toList());
+
+
+
 	return list;
 
-	
-		
+
+
 	}
 
 

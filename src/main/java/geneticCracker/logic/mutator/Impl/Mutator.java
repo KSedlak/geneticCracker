@@ -16,7 +16,7 @@ public class Mutator  implements geneticCracker.logic.mutator.Mutator{
 	double percent=30;
 
 	private Logger logger=Logger.getLogger(getClass());
-	double percentBound=10;
+	double percentBound=30;
 
 	@Override
 	public Creature mutate(Creature c) {
@@ -25,7 +25,7 @@ public class Mutator  implements geneticCracker.logic.mutator.Mutator{
 
 
 		Key dna=c.getDna();
-		logger.info("mutated");
+	//	logger.info("mutated");
 		Object[] table=dna.getKey();
 		int numberToMutate=(int)((percent*table.length)/100);
 		List<Integer> listIndexes =RadnomIndexesGenerator.generateRandomIndexes(numberToMutate, table.length-1);
@@ -46,7 +46,7 @@ public class Mutator  implements geneticCracker.logic.mutator.Mutator{
 
 		dna.setKey(table);
 		c.setDna(dna);
-		logger.info("mutated end");
+	//	logger.info("mutated end");
 
 		}
 
